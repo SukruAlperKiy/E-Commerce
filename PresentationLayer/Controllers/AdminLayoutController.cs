@@ -2,7 +2,7 @@
 
 namespace PresentationLayer.Controllers
 {
-    public class AdminController : Controller
+    public class AdminLayoutController : Controller
     {
         public IActionResult Index()
         {

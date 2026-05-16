@@ -1,12 +1,68 @@
 ﻿@model List<EntityLayer.Concrete.Slider>
- 
+
 @{
-	Layout = null;
+    ViewData["Title"] = "SliderList";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
 }
 
-@foreach (var esya in Model)
-{
-	<h1>@esya.SliderTitle</h1>
-	<h1>@esya.ImageUrl</h1>
-	<h1>@esya.SliderKucukTitle</h1>
-}
+
+
+<div class="container">
+    <div class="page-inner"> 
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">Slider Listesi</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="icon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Slider Listeleri</a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Slider Operasyonlari</a>
+                </li>
+            </ul>
+        </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">Bordered Table</div>
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-bordered table-head-bg-info table-bordered-bd-info table-hover mt-4">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">SliderKucukTitle</th>
+                          <th scope="col">SliderTitle</th>
+                          <th scope="col">ImageUrl</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                                @foreach (var esya in Model)
+                                {
+                                    <tr>
+                                        <td>#</td>
+                                        <td>@esya.SliderKucukTitle</td>
+                                        <td>@esya.SliderTitle</td>
+                                        <td>@esya.ImageUrl</td>
+                                    </tr>
+                                }
+                      </tbody>
+                    </table>
+                    @* </table> *@
+                  </div>
+                </div>
+                </div>
+                </div>
+                </div>
+</div> 

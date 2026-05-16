@@ -10,6 +10,7 @@ namespace PresentationLayer.Controllers
         {
             _sliderService = sliderService123;
         }
+
         public IActionResult SliderList()
         {
             var degerler = _sliderService.zzGetAll();

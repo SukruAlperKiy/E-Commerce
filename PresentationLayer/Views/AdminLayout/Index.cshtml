@@ -1,0 +1,41 @@
+﻿@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Header -->
+    @await Component.InvokeAsync("_AdminHeadLayoutComponentPartial");
+    <!-- End Header -->
+
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      @await Component.InvokeAsync("_AdminSideBarLayoutComponentPartial");
+      <!-- End Sidebar -->
+
+
+      <!-- Main Panel -->
+      @await Component.InvokeAsync("_AdminMainPanelLayoutComponentPartial");
+      <!-- End Main Panel -->
+
+        @RenderBody()
+        <!-- Footer -->
+        @await Component.InvokeAsync("_AdminFooterLayoutComponentPartial");
+        <!-- End Footer -->  
+    </div>
+
+      <!-- Custom template -->
+      @await Component.InvokeAsync("_AdminCustomTemplateLayoutComponentPartial");
+      <!-- End Custom template -->
+
+    </div>
+
+    <!-- Scripts -->
+      @await Component.InvokeAsync("_AdminScriptsLayoutComponentPartial");
+   <!-- End Scripts -->
+
+  </body>
+</html>
+

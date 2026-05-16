@@ -1,4 +1,4 @@
-using BusinessLayer.Abstract;
+﻿using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Context;
@@ -9,8 +9,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<SqlVisualStudioKoprusu_EntityFramework>();
 
-builder.Services.AddScoped<ISliderDal, EfSliderDal>();
+
+//[Tarayıcı / Sayfa İsteği] 
+//       │
+//       ▼
+//[SlidersController] ──(İçeriye ISliderService ister)
+//       │
+//       ▼ (.NET devreye girer: "Sana SliderManager veriyorum")
+//[SliderManager] ──(İçeriye ISliderDal ister)
+//       │
+//       ▼ (.NET devreye girer: "Sana EfSliderDal veriyorum")
+//[EfSliderDal] ──(Veritabanına gider ve veriyi çeker)
+
 builder.Services.AddScoped<ISliderService, SliderManager>();
+builder.Services.AddScoped<ISliderDal, EfSliderDal>();
+
 
 
 
