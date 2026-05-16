@@ -1,0 +1,12 @@
+﻿@model List<EntityLayer.Concrete.Slider>
+ 
+@{
+	Layout = null;
+}
+
+@foreach (var esya in Model)
+{
+	<h1>@esya.SliderTitle</h1>
+	<h1>@esya.ImageUrl</h1>
+	<h1>@esya.SliderKucukTitle</h1>
+}

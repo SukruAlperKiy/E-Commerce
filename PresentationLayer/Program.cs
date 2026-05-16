@@ -1,4 +1,20 @@
+using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
+using DataAccessLayer.Abstract;
+using DataAccessLayer.Context;
+using DataAccessLayer.EntityFramework;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddDbContext<SqlVisualStudioKoprusu_EntityFramework>();
+
+builder.Services.AddScoped<ISliderDal, EfSliderDal>();
+builder.Services.AddScoped<ISliderService, SliderManager>();
+
+
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
