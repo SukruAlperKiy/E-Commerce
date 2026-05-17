@@ -6,7 +6,6 @@ namespace PresentationLayer.Controllers
 {
     public class HomeController : Controller
     {
-        /*              rana alperi cokkkkkkkkkkkk seviyor <3               */
         public IActionResult Index() 
         {
             return View();

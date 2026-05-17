@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
@@ -15,6 +16,38 @@ namespace PresentationLayer.Controllers
         {
             var degerler = _sliderService.zzGetAll();
             return View(degerler);
+        }
+
+        [HttpGet]
+        public IActionResult CreateSlider()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateSlider(Slider varlik)
+        {
+            _sliderService.zzInsert(varlik);
+            return RedirectToAction("SliderList");
+        }
+
+        public IActionResult DeleteSlider(int id)
+        {
+            _sliderService.zzDelete(id);
+            return RedirectToAction("SliderList");
+        }
+
+
+        [HttpGet]
+        public IActionResult UpdateSlider(int id)
+        {
+            var deger = _sliderService.zzGetById(id);
+            return View(deger);
+        }
+        [HttpPost]
+        public IActionResult UpdateSlider(Slider Varlik)
+        {
+            _sliderService.zzUpdate(Varlik);
+            return RedirectToAction("SliderList");
         }
     }
 }

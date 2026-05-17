@@ -38,31 +38,31 @@
                     <div class="card-title">Bordered Table</div>
                   </div>
                   <div class="card-body">
-                    <table class="table table-bordered table-head-bg-info table-bordered-bd-info table-hover mt-4">
+                     <table class="table table-bordered table-head-bg-info table-bordered-bd-info table-hover mt-4">
                       <thead>
                         <tr>
-                          <th scope="col">#</th>
+                          <th scope="col">SliderID</th>
                           <th scope="col">SliderKucukTitle</th>
                           <th scope="col">SliderTitle</th>
-                          <th scope="col">ImageUrl</th>
                         </tr>
                       </thead>
                       <tbody>
                                 @foreach (var esya in Model)
                                 {
                                     <tr>
-                                        <td>#</td>
+                                        <td>@esya.SliderId</td>
                                         <td>@esya.SliderKucukTitle</td>
                                         <td>@esya.SliderTitle</td>
-                                        <td>@esya.ImageUrl</td>
+                                         <td><a href="/Sliders/UpdateSlider/@esya.SliderId" class="btn btn-success">Guncelle</a></td>
+                                         <td><a href="/Sliders/DeleteSlider/@esya.SliderId" class="btn btn-danger">Sil</a></td>
                                     </tr>
                                 }
                       </tbody>
                     </table>
-                    @* </table> *@
+                    <a href="/Sliders/CreateSlider/" class="btn btn-primary">Yeni Slider Ekle</a>
                   </div>
                 </div>
-                </div>
-                </div>
-                </div>
+            </div>
+        </div>
+    </div>
 </div> 
