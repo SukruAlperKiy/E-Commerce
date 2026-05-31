@@ -1,5 +1,226 @@
 ﻿@model List<EntityLayer.Concrete.Slider>
 
+<div class="tekno-slider-wrapper">
+    <div class="tekno-slider" id="mainSlider">
+
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="tekno-slide @(i == 0 ? "active" : "")"
+                 style="background-image: url('@Model[i].ImageUrl');">
+                <div class="slide-overlay"></div>
+                <div class="slide-content">
+                    <span class="slide-kucuk-title">@Model[i].SliderKucukTitle</span>
+                    <h2 class="slide-title">@Model[i].SliderTitle</h2>
+                </div>
+            </div>
+        }
+
+        <!-- Sol / Sağ Oklar -->
+        <button class="slider-btn slider-prev" onclick="changeSlide(-1)" aria-label="Önceki">
+            &#8249;
+        </button>
+        <button class="slider-btn slider-next" onclick="changeSlide(1)" aria-label="Sonraki">
+            &#8250;
+        </button>
+
+        <!-- Nokta Navigasyon -->
+        <div class="slider-dots">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <button class="dot @(i == 0 ? "active" : "")"
+                        onclick="goToSlide(@i)"
+                        aria-label="Slayt @(i+1)">
+                </button>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ── Wrapper ── */
+    .tekno-slider-wrapper {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* ── Ana slider kutusu ── */
+    .tekno-slider {
+        position: relative;
+        width: 100%;
+        height: 520px;
+        overflow: hidden;
+    }
+
+    /* ── Her slayt ── */
+    .tekno-slide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0;
+        transition: opacity 0.7s ease, transform 0.7s ease;
+        transform: scale(1.03);
+    }
+
+    .tekno-slide.active {
+        opacity: 1;
+        transform: scale(1);
+        z-index: 2;
+    }
+
+    /* ── Karartma katmanı ── */
+    .slide-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            120deg,
+            rgba(0, 0, 0, 0.65) 0%,
+            rgba(0, 0, 0, 0.25) 60%,
+            transparent 100%
+        );
+    }
+
+    /* ── Metin alanı ── */
+    .slide-content {
+        position: absolute;
+        bottom: 80px;
+        left: 60px;
+        z-index: 3;
+        max-width: 520px;
+    }
+
+    /* .slide-kucuk-title {
+        display: inline-block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #ff7b00;
+        background: rgba(255, 123, 0, 0.12);
+        border: 1px solid rgba(255, 123, 0, 0.4);
+        padding: 4px 12px;
+        border-radius: 3px;
+        margin-bottom: 14px;
+    }
+
+    .slide-title {
+        font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1.15;
+        text-shadow: 0 2px 16px rgba(0,0,0,0.4);
+        margin: 0;
+    } */
+
+    /* ── Ok butonları ── */
+    .slider-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1.5px solid rgba(255,255,255,0.3);
+        color: #fff;
+        font-size: 2rem;
+        line-height: 1;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background 0.25s, border-color 0.25s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+    }
+
+    .slider-btn:hover {
+        background: rgba(255, 123, 0, 0.75);
+        border-color: #ff7b00;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .slider-prev { left: 20px; }
+    .slider-next { right: 20px; }
+
+    /* ── Nokta navigasyon ── */
+    .slider-dots {
+        position: absolute;
+        bottom: 22px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        gap: 8px;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.4);
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.3s;
+        padding: 0;
+    }
+
+    .dot.active {
+        background: #ff7b00;
+        transform: scale(1.35);
+    }
+
+    /* ── Mobil ── */
+    @@media (max-width: 768px) {
+        .tekno-slider { height: 280px; }
+        .slide-content { left: 24px; bottom: 50px; max-width: 80%; }
+        .slide-title { font-size: 1.3rem; }
+        .slider-btn { width: 36px; height: 36px; font-size: 1.4rem; }
+    }
+</style>
+
+<script>
+    (function () {
+        const slider = document.getElementById('mainSlider');
+        if (!slider) return;
+
+        const slides = slider.querySelectorAll('.tekno-slide');
+        const dots   = slider.querySelectorAll('.dot');
+        let current  = 0;
+        let timer    = null;
+
+        function goToSlide(index) {
+            slides[current].classList.remove('active');
+            dots[current].classList.remove('active');
+            current = (index + slides.length) % slides.length;
+            slides[current].classList.add('active');
+            dots[current].classList.add('active');
+            resetTimer();
+        }
+
+        function changeSlide(dir) {
+            goToSlide(current + dir);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => changeSlide(1), 5000);
+        }
+
+        // Global erişim (onclick için)
+        window.goToSlide   = goToSlide;
+        window.changeSlide = changeSlide;
+
+        resetTimer();
+    })();
+</script>
+
+
+
+@* @model List<EntityLayer.Concrete.Slider>
+
     @foreach (var esya in Model)
     {
         <section class="welcome_area bg-img background-overlay" style="background-image: url(@esya.ImageUrl);">
@@ -10,13 +231,13 @@
                     
                             <h6>@esya.SliderKucukTitle</h6>
                             <h4>@esya.SliderTitle</h4>
-                            @* <a href="/sliders/sliderlist/" class="btn essence-btn">@esya.ImageUrl</a> *@
+                            @* <a href="/sliders/sliderlist/" class="btn essence-btn">@esya.ImageUrl</a> 
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-    }
+    } *@
 
 
 
