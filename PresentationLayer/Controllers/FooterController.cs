@@ -2,10 +2,12 @@
 
 namespace PresentationLayer.Controllers
 {
-    public class AdminController : Controller
+    public class FooterController : Controller
     {
-        public IActionResult Default()
+        public IActionResult Index()
         {
+
+
             return View();
         }
     }

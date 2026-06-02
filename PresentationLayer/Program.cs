@@ -24,7 +24,8 @@ builder.Services.AddDbContext<SqlVisualStudioKoprusu_EntityFramework>();
 builder.Services.AddScoped<ISliderService, SliderManager>();
 builder.Services.AddScoped<ISliderDal, EfSliderDal>();
 
-
+builder.Services.AddScoped<ITopCategoryAreaService, TopCategoryAreaManager>();
+builder.Services.AddScoped<ITopCategoryAreaDal, EfTopCategoryAreaDal>();
 
 
 
