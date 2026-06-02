@@ -27,6 +27,9 @@ builder.Services.AddScoped<ISliderDal, EfSliderDal>();
 builder.Services.AddScoped<ITopCategoryAreaService, TopCategoryAreaManager>();
 builder.Services.AddScoped<ITopCategoryAreaDal, EfTopCategoryAreaDal>();
 
+builder.Services.AddScoped<IFooterService, FooterManager>();
+builder.Services.AddScoped<IFooterDal, EfFooterDal>();
+
 
 
 

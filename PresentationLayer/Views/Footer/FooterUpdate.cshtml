@@ -1,0 +1,60 @@
+﻿@model EntityLayer.Concrete.Footer;
+@{
+    ViewData["Title"] = "FooterUpdate";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+
+
+<div class="container">
+    <div class="page-inner"> 
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">One Cikan Kategoriler Listesi</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="icon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Listeleri</a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Operasyonlari</a>
+                </li>
+            </ul>
+        </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">Yeni One Cikan Kategori Guncelle</div>
+                  </div>
+                  <div class="card-body">
+                     <form method="post">
+                         <input type="hidden" asp-for="FooterId" class="form-control" />
+                         <label>Kategori Basligi</label>
+                         <input type="text" asp-for="FooterSagLinkTitle" class="form-control" />
+                         <br />
+                         <label>Slider ImageUrl</label>
+                         <input type="text" asp-for="FooterSaglinks" class="form-control">
+                         <br />
+                         <button class="btn btn-primary">One Cikan Kategori Guncelle</button>
+
+                     </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+
+

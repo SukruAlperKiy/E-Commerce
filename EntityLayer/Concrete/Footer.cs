@@ -9,12 +9,7 @@ namespace EntityLayer.Concrete
     public class Footer
     {
         public int FooterId { get; set; }
-        public string FooterShopBlogContact { get; set; }
-
-        public string FooterLinks { get; set; }
-
-        public string FooterSbscribe { get; set; }
-
-        public string FooterEnAlt { get; set; }
+        public string FooterSagLinkTitle { get; set; }
+        public string FooterSaglinks { get; set; }
     }
 }

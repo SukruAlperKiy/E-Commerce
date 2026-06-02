@@ -1,0 +1,72 @@
+﻿@model List<EntityLayer.Concrete.Footer>
+@{
+    ViewData["Title"] = "FooterList";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+@* <h1>TopCategoryAreaList</h1> *@
+
+<div class="container">
+    <div class="page-inner"> 
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">Tables</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="icon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Listeleri</a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Operasyonlari</a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Hoverable Table</div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Baslik</th>
+                                    <th scope="col">Link</th>
+                                    <th scope="col">Guncelle</th>
+                                    <th scope="col">Sil</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var esya in Model)
+                                {
+                                    <tr>
+                                        <td>@esya.FooterSagLinkTitle</td>
+                                        <td>@esya.FooterSaglinks</td>
+                                        <td><a href="/Footer/FooterUpdate/@esya.FooterId" class="btn btn-success">Guncelle</a></td>
+                                        <td><a href="/Footer/FooterDelete/@esya.FooterId" class="btn btn-danger">Sil</a></td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                         <a href="/Footer/CreateFooter/" class="btn btn-primary">Yeni One Cikan Kategori Ekle</a> 
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div> 
+
+
