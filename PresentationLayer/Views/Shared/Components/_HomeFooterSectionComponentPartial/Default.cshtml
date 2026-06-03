@@ -1,4 +1,5 @@
-﻿@model List<EntityLayer.Concrete.Footer>
+﻿@model PresentationLayer.Models.FooterAllViewModel
+
 
 <footer class="footer_area clearfix">
         <div class="container">
@@ -14,9 +15,12 @@
 
                         <div class="footer_menu">
                             <ul>
-                                <li><a href="shop.html">Shop</a></li>
-                                <li><a href="blog.html">Blog</a></li>
-                                <li><a href="contact.html">Contact</a></li>
+                            @foreach (var esya in Model.FooterSolListModel)
+                            {
+                                <li><a href="../@esya.FooterSolUrl">@esya.FooterSolTitle</a></li>
+                            }
+                                @* <li><a href="blog.html">Blog</a></li>
+                                <li><a href="contact.html">Contact</a></li> *@
                             </ul>
                         </div>
                     </div>
@@ -26,7 +30,7 @@
                 <div class="col-12 col-md-6">
                     <div class="single_widget_area mb-30">
                         <ul class="footer_widget_menu">
-                            @foreach (var esya in Model)
+                            @foreach (var esya in Model.FooterListModel)
                             {
                                 <li><a href="../@esya.FooterSaglinks">@esya.FooterSagLinkTitle</a></li>
                             }

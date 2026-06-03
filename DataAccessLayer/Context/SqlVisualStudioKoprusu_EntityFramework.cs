@@ -19,6 +19,7 @@ namespace DataAccessLayer.Context
         public DbSet<Slider> EfSliders { get; set; }
         public DbSet<TopCategoryArea> EfTopCategoryArea { get; set; } 
         public DbSet<Footer> EfFooter { get; set; }
+        public DbSet<FooterSol> EfFooterSol { get; set; }
 
     }
 }

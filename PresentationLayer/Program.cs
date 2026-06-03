@@ -30,6 +30,8 @@ builder.Services.AddScoped<ITopCategoryAreaDal, EfTopCategoryAreaDal>();
 builder.Services.AddScoped<IFooterService, FooterManager>();
 builder.Services.AddScoped<IFooterDal, EfFooterDal>();
 
+builder.Services.AddScoped<IFooterSolService, FooterSolManager>();
+builder.Services.AddScoped<IFooterSolDal, EfFooterSolDal>();
 
 
 
