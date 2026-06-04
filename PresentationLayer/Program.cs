@@ -3,6 +3,7 @@ using BusinessLayer.Concrete;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Context;
 using DataAccessLayer.EntityFramework;
+using PresentationLayer.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,8 @@ builder.Services.AddScoped<IFooterDal, EfFooterDal>();
 
 builder.Services.AddScoped<IFooterSolService, FooterSolManager>();
 builder.Services.AddScoped<IFooterSolDal, EfFooterSolDal>();
+
+builder.Services.AddScoped<dal>();
 
 
 
