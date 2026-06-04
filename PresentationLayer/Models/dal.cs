@@ -12,7 +12,14 @@ namespace PresentationLayer.Models
             _connectionString = configuration.GetConnectionString("conn");
         }
 
-        public SqlConnection benimSqlBaglantim => new SqlConnection(_connectionString);
+        public SqlConnection benimSqlBaglantim
+        {
+            get 
+            {
+                return new SqlConnection(_connectionString);
+            }
+        
+        }
 
         public DataSet CommandExecuteReader(String sql, SqlConnection baglanti)
         {
