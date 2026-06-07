@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.Data.SqlClient;
 using PresentationLayer.Models;
 
@@ -20,6 +22,8 @@ namespace PresentationLayer.Controllers
         }
 
 
+
+
         #region footerLogo
         public IActionResult Footer_Logo()
         {
@@ -35,6 +39,7 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
+        [HttpPost]
         public IActionResult Footer_Logo_Updates(int FooterLogoId, IFormFile resimFile, string FooterLogoAltBaslik, string mevcutFotoUrl)
         {
             if (string.IsNullOrEmpty(FooterLogoAltBaslik))
@@ -65,24 +70,29 @@ namespace PresentationLayer.Controllers
                     ViewBag.Hata = "Geçersiz dosya formatı! Sadece JPG, PNG, WEBP yükleyebilirsiniz.";
                     return RedirectToAction("Footer_Logo_Update", new { id = FooterLogoId });
                 }
-
+            //  Bu Kod eger 2 adet 'logo.png' isimli dosya yuklenirse biri digerini ezmesin diye 'Guid.NewGuid().ToString()' bu kodla dosyaya benzersiz isimler olusturur. Örnek: Kullanıcı bilgisayarından benim-profil-resmim.jpg dosyasını seçti. Kod çalışınca uzantiExtension değeri .jpg olur. dosyaIsmi değişkeninin son hali şu şekle dönüşür: 4a8b9c1d - 2e3f - 4a5b - 6c7d - 8e9f0a1b2c3d.jpg
                 string dosyaIsmi = Guid.NewGuid().ToString() + uzantiExtension;
 
             //  bu kodda fotografin gidecegi dosya yolunu verdik
-                string dosyaYolu = Path.Combine(_webHostiongEnviroment.WebRootPath, "wwwroot", "Photos", "FooterLogo");
+                string dosyaYolu = Path.Combine(_webHostiongEnviroment.WebRootPath, "Photos", "FooterLogo");
 
             //  bu Kod, eger dosya yolu yoksa onu olustur diyor. (olmasa da olur)
                 if (Directory.Exists(dosyaYolu) == false)
                 {
                     Directory.CreateDirectory(dosyaYolu);
                 }
-
+            //  bu kod dosyanin yolunu ve dosyanin tam ismini birlestirir. Ornek: dosyaYolu = C:\Projem\wwwroot\Photos\FooterLogo , dosyaIsmi = 4a8b9c1d...jpg tamYol = C:\Projem\wwwroot\Photos\FooterLogo\4a8b9c1d-2e3f-4a5b-6c7d-8e9f0a1b2c3d.jpg
                 string tamYol = Path.Combine(dosyaYolu, dosyaIsmi);
 
+            //  'FileStream' ve 'FileMode.Create' kodlari hard diskte (yukaridaki string tamYol) adresine ici bos bir dosya olusturur.
+                using (var dosyaKaydetmeAkisi = new FileStream(tamYol, FileMode.Create))
+                {
+                //  Bu kod ise kullanicinin tarayicisindan gelen resim verilerini yukarida olusturdugumuz bos dosyanin icine yazar. Yani resmi kaydetme isini bu kod yapar.
+                    resimFile.CopyTo(dosyaKaydetmeAkisi);
+                }
 
-                resimFile.CopyTo(tamYol);
-
-                fotoUrl = "/wwwroot/Photos/FooterLogo/" + dosyaIsmi;
+            //  fotoUrl artik kullanicinin ekledigi resmin geldigi son nokta.
+                fotoUrl = "/Photos/FooterLogo/" + dosyaIsmi;
             }
 
             string sqlUpdateGuncelle = @" 
@@ -92,15 +102,16 @@ namespace PresentationLayer.Controllers
                    FooterLogoFotoUrl = @FooterLogoFotoUrl 
                    Where FooterLogoId = @FooterLogoId";
 
-            using (SqlCommand emir = new SqlCommand(sqlUpdateGuncelle, _dal.benimSqlBaglantim))
+            using (SqlConnection baglanti = _dal.benimSqlBaglantim)
+            using (SqlCommand emir = new SqlCommand(sqlUpdateGuncelle, baglanti))
             {
                 emir.Parameters.AddWithValue("@FooterLogoId", FooterLogoId);
                 emir.Parameters.AddWithValue("@FooterLogoAltBaslik", FooterLogoAltBaslik);
-                emir.Parameters.AddWithValue("@FooterLogoFotoUrl", resimFile);
+                emir.Parameters.AddWithValue("@FooterLogoFotoUrl", fotoUrl);
 
-
-
+                baglanti.Open();
                 emir.ExecuteNonQuery();
+
             }
 
 

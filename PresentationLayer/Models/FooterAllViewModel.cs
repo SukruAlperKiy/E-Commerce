@@ -7,5 +7,8 @@ namespace PresentationLayer.Models
         public List<Footer> FooterListModel { get; set; }
         public List<FooterSol> FooterSolListModel { get; set; }
 
+        public string FooterLogoFotoUrl { get; set; }
+        public string FooterLogoAltBaslik { get; set; }
+
     }
 }
