@@ -49,19 +49,29 @@
                             <tbody>
                                     <tr>
                                         <td class="text-muted">@FooterLogoVeriKumesi.Tables[0].Rows[0]["FooterLogoAltBaslik"]</td>
-                                        <td class="text-muted"><a href="@FooterLogoVeriKumesi.Tables[0].Rows[0]["FooterLogoFotoUrl"]" target="_blank" style="text-decoration: none; padding: 10px; background-color: var(--primary-accent); color: black; border-radius: 4px; box-shadow: rgba(100, 100, 111, 0.2) 4px 4px 5px 2px;">Fotoğrafı aç</a></td>
+                                        @* <td class="text-muted"><a href="@FooterLogoVeriKumesi.Tables[0].Rows[0]["FooterLogoFotoUrl"]" target="_blank" style="text-decoration: none; padding: 10px; background-color: var(--primary-accent); color: black; border-radius: 4px; box-shadow: rgba(100, 100, 111, 0.2) 4px 4px 5px 2px;">Fotoğrafı aç</a></td> *@
+                                       
+                                        <td class="text-muted"><img id="onizleme" src="@FooterLogoVeriKumesi.Tables[0].Rows[0]["FooterLogoFotoUrl"]" style="max-width:100%; max-height:130px; height:auto; border-radius:6px; object-fit: contain;" /> </td>
+                                            
                                         <td><a href="/Admin/Footer_Logo_Update/@FooterLogoVeriKumesi.Tables[0].Rows[0]["FooterLogoId"]" class="btn btn-success">Guncelle</a></td>
-                                        @* <td><a href="/TopCategoryArea/DeleteTopCategoryArea/@esya.TopCategoryAreaId" class="btn btn-danger">Sil</a></td> *@
+                                        
                                     </tr>
                             </tbody>
                         </table>
-                        @* <a href="/TopCategoryArea/CreateTopCategoryArea/" class="btn btn-primary">Yeni One Cikan Kategori Ekle</a> *@
-
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div> 
 
+<script>
+    function yukluResmiGor(){
+        const secilenIlkDosya = event.target.files[0];
+        const onIzleme = document.getElementById('onizleme123');
+
+        const url = URL.createObjectURL(secilenIlkDosya);
+        onIzleme.src = url;
+
+    }
+</script>
