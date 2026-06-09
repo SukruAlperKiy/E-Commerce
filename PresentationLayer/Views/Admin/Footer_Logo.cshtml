@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Footer_Logo";
     Layout = "~/Views/AdminLayout/Index.cshtml";
-    DataSet FooterLogoVeriKumesi = ViewBag.FooterLogoKismi as DataSet;
+    DataSet FooterLogoDataSet = ViewBag.FooterLogoKismi as DataSet;
 }
 
 <div class="container">
@@ -40,23 +40,28 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th scope="col">Logo Resmi</th>
                                     <th scope="col">Alt Baslik</th>
-                                    <th scope="col">Fotograf</th>
                                     <th scope="col">Guncelle</th>
-                                    @* <th scope="col">Sil</th> *@
                                 </tr>
                             </thead>
-                            <tbody>
+                            @if (FooterLogoDataSet != null && FooterLogoDataSet.Tables.Count > 0 && FooterLogoDataSet.Tables[0].Rows.Count > 0)
+                            {
+                                <tbody>
                                     <tr>
-                                        <td class="text-muted">@FooterLogoVeriKumesi.Tables[0].Rows[0]["FooterLogoAltBaslik"]</td>
-                                        @* <td class="text-muted"><a href="@FooterLogoVeriKumesi.Tables[0].Rows[0]["FooterLogoFotoUrl"]" target="_blank" style="text-decoration: none; padding: 10px; background-color: var(--primary-accent); color: black; border-radius: 4px; box-shadow: rgba(100, 100, 111, 0.2) 4px 4px 5px 2px;">Fotoğrafı aç</a></td> *@
-                                       
-                                        <td class="text-muted"><img id="onizleme" src="@FooterLogoVeriKumesi.Tables[0].Rows[0]["FooterLogoFotoUrl"]" style="max-width:100%; max-height:130px; height:auto; border-radius:6px; object-fit: contain;" /> </td>
-                                            
-                                        <td><a href="/Admin/Footer_Logo_Update/@FooterLogoVeriKumesi.Tables[0].Rows[0]["FooterLogoId"]" class="btn btn-success">Guncelle</a></td>
-                                        
+                                        <td class="text-muted"><img id="onizleme" src="@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoFotoUrl"]" style="max-width:100%; max-height:130px; height:auto; border-radius:6px; object-fit: contain;" /> </td>
+                                        <td class="text-muted">@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoAltBaslik"]</td>
+                                        @* <td class="text-muted"><a href="@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoFotoUrl"]" target="_blank" style="text-decoration: none; padding: 10px; background-color: var(--primary-accent); color: black; border-radius: 4px; box-shadow: rgba(100, 100, 111, 0.2) 4px 4px 5px 2px;">Fotoğrafı aç</a></td> *@
+                                        <td><a href="/Admin/Footer_Logo_Update/@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoId"]" class="btn btn-success">Guncelle</a></td>
                                     </tr>
-                            </tbody>
+                                </tbody>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="text-muted"> Gosterilecek Tablo Bulunamadi </td>
+                                </tr>
+                            }
                         </table>
                     </div>
                 </div>

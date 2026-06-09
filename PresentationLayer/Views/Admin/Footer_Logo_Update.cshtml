@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Footer Logo Guncelle";
     Layout = "~/Views/AdminLayout/Index.cshtml";
-    DataSet FooterLogoDataKumesi = ViewBag.FooterLogoKismiUpdate as DataSet;
+    DataSet FooterLogoDataSet = ViewBag.FooterLogoKismiUpdate as DataSet;
 }
 <style>
     /* Örnek projedeki yükleme alanının şık görünmesi için küçük bir stil */
@@ -54,8 +54,8 @@
                   <div class="card-body">
 
                      <form role="form" action="/Admin/Footer_Logo_Updates" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="FooterLogoId" value="@FooterLogoDataKumesi.Tables[0].Rows[0]["FooterLogoId"]"/>
-                        <input type="hidden" name="mevcutFotoUrl" value="@FooterLogoDataKumesi.Tables[0].Rows[0]["FooterLogoFotoUrl"]"/>
+                        <input type="hidden" name="FooterLogoIdParametre" value="@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoId"]"/>
+                        <input type="hidden" name="mevcutFotoUrlParametre" value="@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoFotoUrl"]"/>
          
 
 
@@ -63,7 +63,8 @@
                         <div class="col-md-12">
                             <label class="form-label fw-bold"> Footer Logo Alt Baslik</label>
                             @*buradaki 'name="FooterLogoAltBaslik"' kodundaki 'FooterLogoAltBaslik' controllerdeki methodun basinda aldigimiz "string FooterLogoAltBaslik" ile ayni olmak zorunda*@
-                            <textarea class="form-control shadow-none" name="FooterLogoAltBaslik" rows="1" placeholder="Alt Baslik">@FooterLogoDataKumesi.Tables[0].Rows[0]["FooterLogoAltBaslik"]</textarea>
+                            @*"@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoAltBaslik"]" bu kod sadece veritabanindan var olan veriyi cekiyor. yeni girilen veriyi parametrelere gonderen kod = name="FooterLogoAltBaslikParametre"*@
+                            <textarea class="form-control shadow-none" name="FooterLogoAltBaslikParametre" rows="1" placeholder="Placeholder">@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoAltBaslik"]</textarea>
                         </div>
 
 
@@ -73,7 +74,7 @@
                             <div class="yukleme-alani" onclick="document.getElementById('fileInput').click()">
                                 <p class="mb-1 fw-bold">Tiklayin Veya Resmi Buraya Surukleyip Birakin</p>
                                 <p class="text-muted small mb-0">PNG, JPG, WEBP (Maks. 5MB)</p>
-                                <input type="file" class="d-none" id="fileInput" name="resimFile" accept="image/*" onchange="yuklenenResmiGoruntule(event)"/>   
+                                <input type="file" class="d-none" id="fileInput" name="resimFileParametre" accept="image/*" onchange="yuklenenResmiGoruntule(event)"/>   
                             </div>
                         </div>
 
@@ -83,7 +84,7 @@
                             <label class="form-label d-block mb-2 fw-bold"> Mevcut Fotograf</label>
                             <div class="p-2 border rounded bg-light text-center" style="min-height: 145px; display: flex; align-items: center; justify-content: center;">
                                 @*bu kod nasil calisiyor*@
-                                <img id="onizleme" src="@FooterLogoDataKumesi.Tables[0].Rows[0]["FooterLogoFotoUrl"]" style="max-width:100%; max-height:130px; height:auto; border-radius:6px; object-fit: contain;" />
+                                <img id="onizleme" src="@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoFotoUrl"]" style="max-width:100%; max-height:130px; height:auto; border-radius:6px; object-fit: contain;" />
                             </div>
                         </div>
 

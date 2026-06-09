@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.Data.SqlClient;
 using PresentationLayer.Models;
+using System.Data;
 
 namespace PresentationLayer.Controllers
 {
@@ -39,24 +40,24 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Footer_Logo_Updates(int FooterLogoId, IFormFile resimFile, string FooterLogoAltBaslik, string mevcutFotoUrl)
+        [HttpPost]  // buradaki parametreler "FooterLogoIdParametre vb." Footer_Logo_Update controllerinin viewinden geliyor.
+        public IActionResult Footer_Logo_Updates(int FooterLogoIdParametre, IFormFile resimFileParametre, string FooterLogoAltBaslikParametre, string mevcutFotoUrlParametre)
         {
-            if (string.IsNullOrEmpty(FooterLogoAltBaslik))
+            if (string.IsNullOrEmpty(FooterLogoAltBaslikParametre))
             {
                 //  bu kodun amaci eger kullanici "FooterLogoAltBaslik" kismina birsey girmezse kod hataya gireceginden kullanicinin eskinden girdigi veriler kaybolmasin diye bir onceki verilerini yeniden viewbaga gonderiyoruz.
-                string FooterLogoSql2 = $"Select FooterLogoId, FooterLogoFotoUrl, FooterLogoAltBaslik from FooterLogo where FooterLogoId = {FooterLogoId}";
+                string FooterLogoSql2 = $"Select FooterLogoId, FooterLogoFotoUrl, FooterLogoAltBaslik from FooterLogo where FooterLogoId = {FooterLogoIdParametre}";
 
                 ViewBag.Hata = "Doldurulmasi Zorunlu Alanlar Bos Birakilamaz";
-                return RedirectToAction("Footer_Logo_Update", new { id = FooterLogoId} );
+                return RedirectToAction("Footer_Logo_Update", new { id = FooterLogoIdParametre} );
             }
 
-            string fotoUrl = mevcutFotoUrl;
+            string fotoUrl = mevcutFotoUrlParametre;
 
-            if (resimFile != null && resimFile.Length > 0)
+            if (resimFileParametre != null && resimFileParametre.Length > 0)
             {
                 // bu kod satiri eger resim uzantisi buyuk harflerle gelirse onu kucuk harflere ceviriyor. (.PNG, .JPEG) => (.png, .jpeg)
-                string uzantiExtension = Path.GetExtension(resimFile.FileName).ToLower();
+                string uzantiExtension = Path.GetExtension(resimFileParametre.FileName).ToLower();
 
                 // bu kod sadece ".jpg", ".jpeg", ".png", ".gif", ".webp" bu uzantilara izin veriyor. hackerler .exe, .php ile injection yapamasin diye.
                 string[] izinVerilenUzantilar = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
@@ -65,10 +66,10 @@ namespace PresentationLayer.Controllers
                 if (izinVerilenUzantilar.Contains(uzantiExtension) == false)
                 {
                     //  bu kodun amaci eger kullanici "FooterLogoAltBaslik" kismina birsey girmezse kod hataya gireceginden kullanicinin eskinden girdigi veriler kaybolmasin diye bir onceki verilerini yeniden viewbaga gonderiyoruz.
-                    string FooterLogoSql2 = $"Select FooterLogoId, FooterLogoFotoUrl, FooterLogoAltBaslik from FooterLogo where FooterLogoId = {FooterLogoId}";
+                    string FooterLogoSql2 = $"Select FooterLogoId, FooterLogoFotoUrl, FooterLogoAltBaslik from FooterLogo where FooterLogoId = {FooterLogoIdParametre}";
 
                     ViewBag.Hata = "Geçersiz dosya formatı! Sadece JPG, PNG, WEBP yükleyebilirsiniz.";
-                    return RedirectToAction("Footer_Logo_Update", new { id = FooterLogoId });
+                    return RedirectToAction("Footer_Logo_Update", new { id = FooterLogoIdParametre });
                 }
             //  Bu Kod eger 2 adet 'logo.png' isimli dosya yuklenirse biri digerini ezmesin diye 'Guid.NewGuid().ToString()' bu kodla dosyaya benzersiz isimler olusturur. Örnek: Kullanıcı bilgisayarından benim-profil-resmim.jpg dosyasını seçti. Kod çalışınca uzantiExtension değeri .jpg olur. dosyaIsmi değişkeninin son hali şu şekle dönüşür: 4a8b9c1d - 2e3f - 4a5b - 6c7d - 8e9f0a1b2c3d.jpg
                 string dosyaIsmi = Guid.NewGuid().ToString() + uzantiExtension;
@@ -88,7 +89,7 @@ namespace PresentationLayer.Controllers
                 using (var dosyaKaydetmeAkisi = new FileStream(tamYol, FileMode.Create))
                 {
                 //  Bu kod ise kullanicinin tarayicisindan gelen resim verilerini yukarida olusturdugumuz bos dosyanin icine yazar. Yani resmi kaydetme isini bu kod yapar.
-                    resimFile.CopyTo(dosyaKaydetmeAkisi);
+                    resimFileParametre.CopyTo(dosyaKaydetmeAkisi);
                 }
 
             //  fotoUrl artik kullanicinin ekledigi resmin geldigi son nokta.
@@ -98,27 +99,41 @@ namespace PresentationLayer.Controllers
             string sqlUpdateGuncelle = @" 
                    Update FooterLogo 
                    set 
-                   FooterLogoAltBaslik = @FooterLogoAltBaslik,
-                   FooterLogoFotoUrl = @FooterLogoFotoUrl 
-                   Where FooterLogoId = @FooterLogoId";
+                   FooterLogoAltBaslik = @AltBaslikBoslugu,
+                   FooterLogoFotoUrl = @LogoFotoUrlBoslugu 
+                   Where FooterLogoId = @idBoslugu";
 
-            using (SqlConnection baglanti = _dal.benimSqlBaglantim)
-            using (SqlCommand emir = new SqlCommand(sqlUpdateGuncelle, baglanti))
+       //  Bu kodda "SqlConnection baglanti" isminde bir sqlconnection variablesi acmamizin sebebi. her "_dal.benimSqlBaglantim" dedigimiz yerde yeni bir SqlConnection acmasi.
+            using (SqlConnection baglanti = _dal.benimSqlBaglantim) 
             {
-                emir.Parameters.AddWithValue("@FooterLogoId", FooterLogoId);
-                emir.Parameters.AddWithValue("@FooterLogoAltBaslik", FooterLogoAltBaslik);
-                emir.Parameters.AddWithValue("@FooterLogoFotoUrl", fotoUrl);
+                using (SqlCommand emir = new SqlCommand(sqlUpdateGuncelle, baglanti))
+                {
+                    emir.Parameters.AddWithValue("@idBoslugu", FooterLogoIdParametre);
+                    emir.Parameters.AddWithValue("@AltBaslikBoslugu", FooterLogoAltBaslikParametre);
+                    emir.Parameters.AddWithValue("@LogoFotoUrlBoslugu", fotoUrl);
 
-                baglanti.Open();
-                emir.ExecuteNonQuery();
+                    baglanti.Open();
 
+                    emir.ExecuteNonQuery();
+                }
             }
-
-
+            
             return RedirectToAction("Footer_Logo");
         }
 
 
         #endregion
+
+        #region Categories
+
+        public IActionResult kategorilerSelect()
+        {
+            string kategorilerSql = "Select W";
+
+            return View();
+        }
+
+        #endregion
+
     }
 }
