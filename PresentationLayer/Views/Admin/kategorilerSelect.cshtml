@@ -1,0 +1,84 @@
+﻿@using System.Data
+
+@{
+    ViewData["Title"] = "kategorilerSelect";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+    DataSet KategorilerDataSet = ViewBag.KategorilerViewBag as DataSet;
+}
+
+
+<div class="container">
+    <div class="page-inner"> 
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">Tables</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="icon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Listeleri</a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Operasyonlari</a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Hoverable Table</div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Kategori Id</th>
+                                    <th scope="col">Kategori Ismi</th>
+                                    <th scope="col">Kategori Statusu</th>
+                                    <th scope="col">Guncelle</th>
+                                </tr>
+                            </thead>
+                            @if (KategorilerDataSet != null && KategorilerDataSet.Tables.Count > 0 && KategorilerDataSet.Tables[0].Rows.Count > 0)
+                            {
+                                
+                                <tbody>
+                                    
+                                        @foreach (DataRow sira in KategorilerDataSet.Tables[0].Rows)
+                                        {
+                                            <tr>
+                                                @* <td class="text-muted"><img id="onizleme" src="@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoFotoUrl"]" style="max-width:100%; max-height:130px; height:auto; border-radius:6px; object-fit: contain;" /> </td> *@
+                                                <td class="text-muted">@sira["kategoriId"]</td>
+                                                <td class="text-muted">@sira["kategoriIsim"]</td>
+                                                <td class="text-muted">@sira["kategoriStatus"]</td>
+
+                                                @* <td class="text-muted"><a href="@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoFotoUrl"]" target="_blank" style="text-decoration: none; padding: 10px; background-color: var(--primary-accent); color: black; border-radius: 4px; box-shadow: rgba(100, 100, 111, 0.2) 4px 4px 5px 2px;">Fotoğrafı aç</a></td> *@
+                                                 <td><a href="/Admin/kategorilerUpdate/@sira["kategoriId"]" class="btn btn-success">Guncelle</a></td> 
+                                            </tr>
+                                        }
+                                    
+                                </tbody>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="text-muted"> Gosterilecek Kategori Bulunamadi </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+

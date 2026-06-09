@@ -1,0 +1,76 @@
+﻿@using System.Data;
+
+@{
+    ViewData["Title"] = "kategorilerUpdate";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+    DataSet KategorilerUpdateDataSet = ViewBag.KategorilerUpdateViewBag as DataSet;
+}
+
+
+<div class="container">
+    <div class="page-inner"> 
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">One Cikan Kategoriler Listesi</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="icon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Listeleri</a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Operasyonlari</a>
+                </li>
+            </ul>
+        </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">Yeni One Cikan Kategori Guncelle</div>
+                  </div>
+                  <div class="card-body">
+                     <form role="form" action="/admin/kategorilerUpdatePost" method="post">
+                         <input type="hidden" name="KategoriIdParametre" value="@KategorilerUpdateDataSet.Tables[0].Rows[0]["kategoriId"]">
+                         
+                         <div class="col-md-12">
+                             <label>Kategori Ismi</label>
+                             <textarea class="form-control" name="KategoriIsmiParametre" rows="1" placeholder="yer tutucu">@KategorilerUpdateDataSet.Tables[0].Rows[0]["kategoriIsim"]</textarea>
+                         </div>
+
+                         <div class="col-md-6">
+                             <select class="form-control" name="KategoriStatusParametre" placeholder="Aktifligi Belirleyin">
+                                    @{
+                                        int aktiflikPasiflik = Convert.ToInt16(KategorilerUpdateDataSet.Tables[0].Rows[0]["kategoriStatus"]);
+                                        switch (aktiflikPasiflik)
+                                        {
+                                            case 1:
+                                                    <option value="1">Aktif</option>
+                                                    <option value="0">Pasif</option>
+                                                    break;
+                                            case 0:<option value="0">Pasif</option>
+                                                    <option value="1">Aktif</option>
+                                                    break;
+                                            default: break;
+                                        }
+                                    }
+                             </select>
+                         </div>
+
+                         <button type="submit" class="btn btn-primary">One Cikan Kategori Guncelle</button>
+                     </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+

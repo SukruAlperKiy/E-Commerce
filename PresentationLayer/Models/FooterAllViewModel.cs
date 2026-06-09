@@ -10,5 +10,8 @@ namespace PresentationLayer.Models
         public string FooterLogoFotoUrl { get; set; }
         public string FooterLogoAltBaslik { get; set; }
 
+        public string kategoriIsim { get; set; }
+        public string kategoriStatus { get; set; }
+
     }
 }

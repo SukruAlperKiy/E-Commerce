@@ -120,17 +120,61 @@ namespace PresentationLayer.Controllers
             
             return RedirectToAction("Footer_Logo");
         }
-
-
         #endregion
+
+
 
         #region Categories
 
         public IActionResult kategorilerSelect()
         {
-            string kategorilerSql = "Select W";
+            string kategorilerSql = "Select kategoriId, kategoriIsim, kategoriStatus From Kategoriler";
+            ViewBag.KategorilerViewBag = _dal.CommandExecuteReader(kategorilerSql,_dal.benimSqlBaglantim);
 
             return View();
+        }
+
+        public IActionResult kategorilerUpdate(int id)
+        {
+            string kategorilerUpdateSql = $"Select kategoriId,kategoriIsim,kategoriStatus from Kategoriler where kategoriId = {id}";
+            ViewBag.KategorilerUpdateViewBag = _dal.CommandExecuteReader(kategorilerUpdateSql, _dal.benimSqlBaglantim);
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult kategorilerUpdatePost(int KategoriIdParametre, string KategoriIsmiParametre, int KategoriStatusParametre)
+        {
+            if (string.IsNullOrEmpty(KategoriIsmiParametre))
+            {
+                string bosKontrol = $"Select kategoriId, kategoriIsim, kategoriStatus from Kategoriler where kategoriId = {KategoriIdParametre}";
+                ViewBag.KategorilerUpdateViewBag = _dal.CommandExecuteReader(bosKontrol,_dal.benimSqlBaglantim);
+
+                return View("kategorilerUpdate");
+            }
+
+            string sqlUpdateKategoriler = @"
+            Update kategoriler
+            set
+            kategoriIsim = @kategoriIsimTutucu,
+            kategoriStatus = @kategoriStatusTutucu 
+            where 
+            kategoriId = @kategoriIdTutucu";
+
+            using (SqlConnection baglanti = _dal.benimSqlBaglantim)
+            {
+                using (SqlCommand emir = new SqlCommand(sqlUpdateKategoriler,baglanti))
+                {
+                    emir.Parameters.AddWithValue("@kategoriIdTutucu", KategoriIdParametre);
+                    emir.Parameters.AddWithValue("@kategoriIsimTutucu", KategoriIsmiParametre);
+                    emir.Parameters.AddWithValue("@kategoriStatusTutucu", KategoriStatusParametre);
+
+                    baglanti.Open();
+
+                    emir.ExecuteNonQuery();
+                }
+            }
+                return RedirectToAction("kategorilerSelect");
         }
 
         #endregion
