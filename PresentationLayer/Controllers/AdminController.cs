@@ -122,8 +122,6 @@ namespace PresentationLayer.Controllers
         }
         #endregion
 
-
-
         #region Categories
 
         public IActionResult kategorilerSelect()
@@ -150,6 +148,7 @@ namespace PresentationLayer.Controllers
                 string bosKontrol = $"Select kategoriId, kategoriIsim, kategoriStatus from Kategoriler where kategoriId = {KategoriIdParametre}";
                 ViewBag.KategorilerUpdateViewBag = _dal.CommandExecuteReader(bosKontrol,_dal.benimSqlBaglantim);
 
+                ViewBag.Hata = "Doldurulmasi Zorunlu Alanlar Bos Birakilamaz";
                 return View("kategorilerUpdate");
             }
 
@@ -175,6 +174,59 @@ namespace PresentationLayer.Controllers
                 }
             }
                 return RedirectToAction("kategorilerSelect");
+        }
+
+        #endregion
+
+        #region Urunler
+
+        public IActionResult UrunlerSelect()
+        {
+            string urunSelectSql = "Select UrunId, UrunFiyat, UrunIsim, UrunAciklama, UrunStatus from Urunler";
+            ViewBag.UrunSelectViewBag = _dal.CommandExecuteReader(urunSelectSql, _dal.benimSqlBaglantim);
+
+            return View();
+        }
+
+        public IActionResult UrunlerUpdateGet(int id)
+        {
+            string urunlerGetSql = $"Select UrunId, UrunFiyat, UrunIsim, UrunAciklama, UrunStatus from Urunler where UrunId = {id}";
+            ViewBag.UrunUpdateGetViewBag = _dal.CommandExecuteReader(urunlerGetSql, _dal.benimSqlBaglantim);
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult UrunlerUpdatePost(int UrunIdParametre, decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre)
+        {
+            //if ()
+            //{
+
+            //}
+
+            string UrunlerUpdateSql = @"
+            Update Urunler set
+            UrunFiyat = @UrunFiyatTutucu,
+            UrunIsim = @UrunIsimTutucu,
+            UrunAciklama = @UrunAciklamaTutucu,
+            UrunStatus = @UrunStatusTutucu
+            where UrunId = @UrunIdTutucu";
+
+            using (SqlConnection baglanti = _dal.benimSqlBaglantim)
+            {
+                using (SqlCommand emir = new SqlCommand(UrunlerUpdateSql,baglanti))
+                {
+                    emir.Parameters.AddWithValue("@UrunFiyatTutucu",UrunFiyatParametre);
+                    emir.Parameters.AddWithValue("@UrunIsimTutucu", UrunIsimParametre);
+                    emir.Parameters.AddWithValue("@UrunAciklamaTutucu", UrunAciklamaParametre);
+                    emir.Parameters.AddWithValue("@UrunStatusTutucu", UrunStatusParametre);
+                    emir.Parameters.AddWithValue("@UrunIdTutucu", UrunIdParametre);
+
+                    baglanti.Open();
+
+                    emir.ExecuteNonQuery();
+                }
+            }
+                return RedirectToAction("UrunlerSelect");
         }
 
         #endregion

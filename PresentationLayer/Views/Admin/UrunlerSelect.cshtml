@@ -1,0 +1,80 @@
+﻿@using System.Data
+
+@{
+    ViewData["Title"] = "UrunlerSelect";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+    DataSet UrunlerDataSet = ViewBag.UrunSelectViewBag as DataSet;
+}
+
+<div class="container">
+    <div class="page-inner"> 
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">Tables</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="icon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Listeleri</a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Operasyonlari</a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Hoverable Table</div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Urun Fiyat</th>
+                                    <th scope="col">Urun Ismi</th>
+                                    <th scope="col">Urun Aciklamasi</th>
+                                    <th scope="col">Urun Status</th>
+                                    <th scope="col">Guncelle</th>
+                                </tr>
+                            </thead>
+                            @if (UrunlerDataSet != null && UrunlerDataSet.Tables.Count > 0 && UrunlerDataSet.Tables[0].Rows.Count > 0)
+                            {
+                                <tbody>
+                                    @foreach (DataRow sira in UrunlerDataSet.Tables[0].Rows)
+                                    {
+                                        <tr>
+                                            <td class="text-muted">@sira["UrunFiyat"]</td>
+                                            <td class="text-muted">@sira["UrunIsim"]</td>
+                                            <td class="text-muted">@sira["UrunAciklama"]</td>
+                                            <td class="text-muted">@sira["UrunStatus"]</td>
+
+                                            <td><a href="/Admin/UrunlerUpdateGet/@sira["UrunId"]" class="btn btn-success">Guncelle</a></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="text-muted"> Gosterilecek Urun Bulunamadi </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+

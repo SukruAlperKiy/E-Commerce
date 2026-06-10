@@ -1,0 +1,89 @@
+﻿@using System.Data
+
+@{
+    ViewData["Title"] = "UrunlerUpdateGet";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+    DataSet UrunlerUpdateDataSet = ViewBag.UrunUpdateGetViewBag as DataSet;
+}
+
+
+<div class="container">
+    <div class="page-inner"> 
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">One Cikan Kategoriler Listesi</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="icon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Listeleri</a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Operasyonlari</a>
+                </li>
+            </ul>
+        </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">Yeni One Cikan Kategori Guncelle</div>
+                  </div>
+                  <div class="card-body">
+                     <form role="form" action="/admin/UrunlerUpdatePost" method="post">
+                         <input type="hidden" name="UrunIdParametre" value="@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunId"]">
+                         
+                         <div class="col-md-12">
+                             <label>Urun Ismi</label>
+                             <textarea class="form-control" name="UrunIsimParametre" rows="1" placeholder="yer tutucu">@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunIsim"]</textarea>
+                         </div>
+
+                         <div class="col-md-12">
+                             <label>Urun Aciklama</label>
+                             <textarea class="form-control" name="UrunAciklamaParametre" rows="4">@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunAciklama"]</textarea>
+                         </div>
+
+                         <div class="col-md-3">
+                            <label>Urun Fiyat</label>
+                            <input type="number" name="UrunFiyatParametre" step="0.01" min="0" value="@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunFiyat"]" />
+                         </div>
+                        
+
+                         <div class="col-md-6">
+                             <select class="form-control" name="UrunStatusParametre" placeholder="Aktifligi Belirleyin">
+                                    @{
+                                        int aktiflikPasiflik = Convert.ToInt16(UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunStatus"]);
+                                        switch (aktiflikPasiflik)
+                                        {
+                                            case 1:
+                                                    <option value="1">Aktif</option>
+                                                    <option value="0">Pasif</option>
+                                                    break;
+                                            case 0:<option value="0">Pasif</option>
+                                                    <option value="1">Aktif</option>
+                                                    break;
+                                            default: break;
+                                        }
+                                    }
+                             </select>
+                         </div>
+
+                         <button type="submit" class="btn btn-primary">One Cikan Kategori Guncelle</button>
+                     </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+
