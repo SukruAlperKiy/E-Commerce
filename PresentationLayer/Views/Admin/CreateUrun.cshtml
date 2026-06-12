@@ -1,0 +1,77 @@
+﻿
+
+@{
+    ViewData["Title"] = "CreateUrun";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+
+<div class="container">
+    <div class="page-inner"> 
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">Urunler</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="icon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Urunler Listeleri</a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Urun Operasyonlari</a>
+                </li>
+            </ul>
+        </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">Yeni Urun Ekle</div>
+                  </div>
+                  <div class="card-body">
+                     <form role="form" action="/admin/CreateUrun" method="post">
+                         <input type="hidden" name="UrunIdParametre">
+                         
+                         <div class="col-md-12">
+                             <label>Urun Ismi</label>
+                             <textarea class="form-control" name="UrunIsimParametre" rows="1" placeholder="Urun Isim"></textarea>
+                         </div>
+                         <br />
+                         <div class="col-md-12">
+                             <label>Urun Aciklama</label>
+                             <textarea class="form-control" name="UrunAciklamaParametre" rows="4" placeholder="Urun Aciklama"></textarea>
+                         </div>
+                         <br />
+                         <div class="col-md-3">
+                            <label>Urun Fiyat</label>
+                            <input type="number" class="form-control" name="UrunFiyatParametre" step="0.01" min="0" placeholder="Urun Fiyat"/>
+                         </div>
+                        
+                         <br />
+                         <div class="col-md-6">
+                             <select class="form-control" name="UrunStatusParametre" placeholder="Aktifligi Belirleyin">
+                                 <option value="1">Aktif</option>
+                                 <option value="0">Pasif</option>
+                             </select>
+                         </div>
+                         <br />
+                         <button type="submit" class="btn btn-primary mt-3">Urun Ekle</button>
+                     </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+
+

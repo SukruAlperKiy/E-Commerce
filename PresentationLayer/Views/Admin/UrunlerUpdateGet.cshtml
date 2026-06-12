@@ -45,18 +45,18 @@
                              <label>Urun Ismi</label>
                              <textarea class="form-control" name="UrunIsimParametre" rows="1" placeholder="yer tutucu">@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunIsim"]</textarea>
                          </div>
-
+                         <br />
                          <div class="col-md-12">
                              <label>Urun Aciklama</label>
                              <textarea class="form-control" name="UrunAciklamaParametre" rows="4">@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunAciklama"]</textarea>
                          </div>
-
+                         <br />
                          <div class="col-md-3">
                             <label>Urun Fiyat</label>
-                            <input type="number" name="UrunFiyatParametre" step="0.01" min="0" value="@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunFiyat"]" />
+                            <input type="number" class="form-control" name="UrunFiyatParametre" step="0.01" min="0" value="@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunFiyat"]" />
                          </div>
                         
-
+                         <br />
                          <div class="col-md-6">
                              <select class="form-control" name="UrunStatusParametre" placeholder="Aktifligi Belirleyin">
                                     @{
@@ -74,6 +74,7 @@
                                         }
                                     }
                              </select>
+                             <br />
                          </div>
 
                          <button type="submit" class="btn btn-primary">One Cikan Kategori Guncelle</button>

@@ -44,7 +44,8 @@
                                     <th scope="col">Urun Ismi</th>
                                     <th scope="col">Urun Aciklamasi</th>
                                     <th scope="col">Urun Status</th>
-                                    <th scope="col">Guncelle</th>
+                                    @* <th scope="col">Guncelle</th>
+                                    <th scope="col">Sil</th> *@
                                 </tr>
                             </thead>
                             @if (UrunlerDataSet != null && UrunlerDataSet.Tables.Count > 0 && UrunlerDataSet.Tables[0].Rows.Count > 0)
@@ -59,6 +60,7 @@
                                             <td class="text-muted">@sira["UrunStatus"]</td>
 
                                             <td><a href="/Admin/UrunlerUpdateGet/@sira["UrunId"]" class="btn btn-success">Guncelle</a></td>
+                                            <td><a href="/Admin/UrunDelete/@sira["UrunId"]" class="btn btn-danger">Sil</a></td>
                                         </tr>
                                     }
                                 </tbody>
@@ -70,6 +72,7 @@
                                 </tr>
                             }
                         </table>
+                        <a href="/admin/CreateUrun" class="btn btn-primary">Yeni Urun Ekle</a>
                     </div>
                 </div>
             </div>

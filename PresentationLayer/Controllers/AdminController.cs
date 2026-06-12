@@ -1,7 +1,9 @@
 ﻿using Humanizer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 using PresentationLayer.Models;
 using System.Data;
 
@@ -198,10 +200,15 @@ namespace PresentationLayer.Controllers
         [HttpPost]
         public IActionResult UrunlerUpdatePost(int UrunIdParametre, decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre)
         {
-            //if ()
-            //{
+            if (UrunFiyatParametre <= 0 || 
+                string.IsNullOrEmpty(UrunIsimParametre) ||
+                string.IsNullOrEmpty(UrunAciklamaParametre))
+            {
+                string UrunlerUpdateOncesi = $"Select UrunFiyat, UrunIsim, UrunAciklama, UrunStatus from Urunler where UrunId = {UrunIdParametre}";
+                ViewBag.UrunlerUpdateViewBag = _dal.CommandExecuteReader(UrunlerUpdateOncesi, _dal.benimSqlBaglantim);
 
-            //}
+                return RedirectToAction("UrunlerUpdateGet");
+            }
 
             string UrunlerUpdateSql = @"
             Update Urunler set
@@ -226,6 +233,59 @@ namespace PresentationLayer.Controllers
                     emir.ExecuteNonQuery();
                 }
             }
+                return RedirectToAction("UrunlerSelect");
+        }
+
+        [HttpGet]
+        public IActionResult CreateUrun()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateUrun(decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre)
+        {
+
+
+            string UrunEklemeQuery = @"Insert into Urunler 
+            (UrunFiyat, UrunIsim, UrunAciklama, UrunStatus) 
+            VALUES 
+            (@UrunFiyatYerTutucu,@UrunIsimYerTutucu,@UrunAciklamaYerTutucu,@UrunStatusYerTutucu)";
+
+            using (SqlConnection baglanti = _dal.benimSqlBaglantim)
+            {
+                using (SqlCommand emir = new SqlCommand(UrunEklemeQuery, baglanti))
+                {// burada "@UrunFiyatYerTutucu" basindaki "@" Koymak zorundasin. yoksa okuyamiyor.
+                    emir.Parameters.AddWithValue("@UrunFiyatYerTutucu", UrunFiyatParametre);
+                    emir.Parameters.AddWithValue("@UrunIsimYerTutucu", UrunIsimParametre);
+                    emir.Parameters.AddWithValue("@UrunAciklamaYerTutucu", UrunAciklamaParametre);
+                    emir.Parameters.AddWithValue("@UrunStatusYerTutucu", UrunStatusParametre);
+
+                    baglanti.Open();
+
+                    emir.ExecuteNonQuery();
+                }
+
+            }
+
+                return RedirectToAction("UrunlerSelect");
+        }
+
+        public IActionResult UrunDelete(int id)
+        {
+            string UrunSilmeQuery = $"Delete from Urunler where UrunId = @idTutucu";
+
+            using (SqlConnection baglanti = _dal.benimSqlBaglantim)
+            {
+                using (SqlCommand emir = new SqlCommand(UrunSilmeQuery, baglanti)) 
+                {
+                    emir.Parameters.AddWithValue("@idTutucu", id);
+
+                    baglanti.Open();
+                    emir.ExecuteNonQuery();
+                } 
+            }
+
                 return RedirectToAction("UrunlerSelect");
         }
 

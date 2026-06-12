@@ -28,6 +28,8 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
+
+@* 
               <li class="nav-item active">
                 <a
                   data-bs-toggle="collapse"
@@ -133,12 +135,12 @@
                     </li>
                   </ul>
                 </div>
-              </li>
+              </li> *@
 
               <!-- #region Kategoriler -->
               <li class="nav-item">
                 <a href="../../admin/kategorilerSelect">
-                  <i class="fas fa-file"></i>
+                  <i class="fas fa-cubes"></i>
                   <p>Kategoriler</p>
                 </a>
               </li>
@@ -147,13 +149,13 @@
               <!-- #region urunler -->
               <li class="nav-item">
                 <a href="../../admin/UrunlerSelect">
-                  <i class="fas fa-file"></i>
+                  <i class="fas fa-shopping-cart"></i>
                   <p>Urunler</p>
                 </a>
               </li>
               <!-- #endregion -->
 
-              <li class="nav-item">
+              @* <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#forms">
                   <i class="fas fa-pen-square"></i>
                   <p>Forms</p>
@@ -231,11 +233,37 @@
                     </li>
                   </ul>
                 </div>
-              </li>
+              </li> *@
+
+
               <li class="nav-item">
-                <a href="../">
-                  <i class="fas fa-desktop"></i>
+                <a data-bs-toggle="collapse" href="#AnasayfaSubMenu">
+                  <i class="fas fa-home"></i>
                   <p>Anasayfa</p>
+                  <span class="caret"></span>
+                </a>
+                    <div class="collapse" id="AnasayfaSubMenu">
+                          <ul class="nav nav-collapse">
+                              <li class="nav-item">
+                                <a href="../sliders/sliderlist">
+                                  <i class="fas fa-image"></i>
+                                  <span class="sub-item">Slider</span>
+                                </a>
+                              </li>
+                              
+                              <li class="nav-item">
+                                <a href="../topcategoryarea/TopCategoryAreaList">
+                                  <i class="fas fa-chart-bar "></i>
+                                    <span class="sub-item">En Populer Kategoriler</span>
+                                </a>
+                              </li>
+                          </ul>
+                    </div>
+              </li>
+              @* <li class="nav-item">
+                <a href="../sliders/sliderlist">
+                  <i class="fas fa-car"></i>
+                  <p>Slider</p>
                   <span class="badge badge-success">4</span>
                 </a>
               </li>
@@ -247,30 +275,12 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../">
-                  <i class="fas fa-desktop"></i>
-                  <p>Anasayfa</p>
+                <a href="../sliders/sliderlist">
+                  <i class="fas fa-car"></i>
+                  <p>Slider</p>
                   <span class="badge badge-success">4</span>
                 </a>
-              </li>
-
-              <!-- #region Kategoriler -->
-              <li class="nav-item">
-                <a href="../../admin/kategorilerSelect">
-                  <i class="fas fa-file"></i>
-                  <p>Kategoriler</p>
-                </a>
-              </li>
-              <!-- #endregion -->
-
-              <!-- #region urunler -->
-              <li class="nav-item">
-                <a href="../../admin/UrunlerSelect">
-                  <i class="fas fa-file"></i>
-                  <p>Urunler</p>
-                </a>
-              </li>
-              <!-- #endregion -->
+              </li> *@
               
               @* <li class="nav-item">
                 <a href="../../documentation/index.html">
@@ -281,9 +291,37 @@
               </li> *@
 
               <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#FooterSubMenu">
+                  <i class="fas fa-bars"></i>
+                  <p>Footer</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="FooterSubMenu">
+                  <ul class="nav nav-collapse">
+                    <li>
+                            <a href="../footer/FooterList">
+                              <span class="sub-item">Footer Sag</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="../footersol/FooterSolList">
+                              <span class="sub-item">Footer Sol</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="../admin/Footer_Logo">
+                              <span class="sub-item">Footer Logo</span>
+                            </a>
+                          </li>
+                  </ul>
+                </div>
+              </li>
+
+
+              @* <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#submenu">
                   <i class="fas fa-bars"></i>
-                  <p>Menu Levels</p>
+                  <p>Footer</p>
                   <span class="caret"></span>
                 </a>
                 <div class="collapse" id="submenu">
@@ -296,13 +334,18 @@
                       <div class="collapse" id="subnav1">
                         <ul class="nav nav-collapse subnav">
                           <li>
-                            <a href="#">
-                              <span class="sub-item">Level 2</span>
+                            <a href="../footer/FooterList">
+                              <span class="sub-item">Footer Sag</span>
                             </a>
                           </li>
                           <li>
-                            <a href="#">
-                              <span class="sub-item">Level 2</span>
+                            <a href="../footersol/FooterSolList">
+                              <span class="sub-item">Footer Sol</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="../admin/Footer_Logo">
+                              <span class="sub-item">Footer Logo</span>
                             </a>
                           </li>
                         </ul>
@@ -330,7 +373,7 @@
                     </li>
                   </ul>
                 </div>
-              </li>
+              </li> *@
             </ul>
           </div>
         </div>
