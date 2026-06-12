@@ -177,6 +177,51 @@ namespace PresentationLayer.Controllers
             }
                 return RedirectToAction("kategorilerSelect");
         }
+        [HttpGet]
+        public IActionResult CreateCategories()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateCategories(string kategoriIsimParametre, int kategoriStatusParametre)
+        {
+            string CreateCategoriesQuery = @"Insert into Kategoriler
+            (kategoriIsim, kategoriStatus) 
+            values 
+            (@kategoriIsimYerTurucu, @kategoriStatusYerTutucu)";
+
+            using (SqlConnection baglanti = _dal.benimSqlBaglantim) 
+            {
+                using (SqlCommand emir = new SqlCommand(CreateCategoriesQuery, baglanti))
+                {
+                    emir.Parameters.AddWithValue("@kategoriIsimYerTurucu", kategoriIsimParametre);
+                    emir.Parameters.AddWithValue("@kategoriStatusYerTutucu", kategoriStatusParametre);
+
+                    baglanti.Open();
+                    emir.ExecuteNonQuery();
+                }
+            }
+            return RedirectToAction("kategorilerSelect");
+        }
+
+        public IActionResult DeleteCategories(int id)
+        {
+            string DeleteKategoriQuery = $"Delete from Kategoriler where kategoriId = @kategoriIdYerTutucu";
+
+            using (SqlConnection baglanti = _dal.benimSqlBaglantim)
+            {
+                using (SqlCommand emir = new SqlCommand(DeleteKategoriQuery, baglanti))
+                {
+                    emir.Parameters.AddWithValue("@kategoriIdYerTutucu", id);
+
+                    baglanti.Open();
+                    emir.ExecuteNonQuery();
+                }
+            }
+
+                return RedirectToAction("kategorilerSelect");
+        }
 
         #endregion
 
@@ -248,8 +293,9 @@ namespace PresentationLayer.Controllers
         [HttpPost]
         public IActionResult CreateUrun(decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre, int KategoriIdParametre)
         {
-            
 
+
+        //  "DECLARE @YeniUrunId int = SCOPE_IDENTITY();" Urun olustururken urune id vermedigimizden cekebilecegimiz bir id yok. bu yuzden bu kod databaseye verecegimiz id'yi kendisi hepsalayip @YeniUrunId kismina yaziyor.
             string UrunEklemeQuery = @"Insert into Urunler 
             (UrunFiyat, UrunIsim, UrunAciklama, UrunStatus) 
             VALUES 

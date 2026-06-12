@@ -44,7 +44,6 @@
                                     <th scope="col">Kategori Id</th>
                                     <th scope="col">Kategori Ismi</th>
                                     <th scope="col">Kategori Statusu</th>
-                                    <th scope="col">Guncelle</th>
                                 </tr>
                             </thead>
                             @if (KategorilerDataSet != null && KategorilerDataSet.Tables.Count > 0 && KategorilerDataSet.Tables[0].Rows.Count > 0)
@@ -60,8 +59,8 @@
                                                 <td class="text-muted">@sira["kategoriIsim"]</td>
                                                 <td class="text-muted">@sira["kategoriStatus"]</td>
 
-                                                @* <td class="text-muted"><a href="@FooterLogoDataSet.Tables[0].Rows[0]["FooterLogoFotoUrl"]" target="_blank" style="text-decoration: none; padding: 10px; background-color: var(--primary-accent); color: black; border-radius: 4px; box-shadow: rgba(100, 100, 111, 0.2) 4px 4px 5px 2px;">Fotoğrafı aç</a></td> *@
                                                  <td><a href="/Admin/kategorilerUpdate/@sira["kategoriId"]" class="btn btn-success">Guncelle</a></td> 
+                                                 <td><a href="/Admin/DeleteCategories/@sira["kategoriId"]" class="btn btn-danger">Sil</a></td> 
                                             </tr>
                                         }
                                     
@@ -74,6 +73,7 @@
                                 </tr>
                             }
                         </table>
+                        <a href="/admin/CreateCategories" class="btn btn-primary">Kategori Olustur</a>
                     </div>
                 </div>
             </div>
