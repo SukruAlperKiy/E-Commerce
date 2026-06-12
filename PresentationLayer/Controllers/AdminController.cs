@@ -239,18 +239,25 @@ namespace PresentationLayer.Controllers
         [HttpGet]
         public IActionResult CreateUrun()
         {
+            string KategorilerSelectQuery = @"Select kategoriId, kategoriIsim, kategoriStatus from Kategoriler";
+            ViewBag.KategorilerSelectViewBag = _dal.CommandExecuteReader(KategorilerSelectQuery, _dal.benimSqlBaglantim);
+
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreateUrun(decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre)
+        public IActionResult CreateUrun(decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre, int KategoriIdParametre)
         {
-
+            
 
             string UrunEklemeQuery = @"Insert into Urunler 
             (UrunFiyat, UrunIsim, UrunAciklama, UrunStatus) 
             VALUES 
-            (@UrunFiyatYerTutucu,@UrunIsimYerTutucu,@UrunAciklamaYerTutucu,@UrunStatusYerTutucu)";
+            (@UrunFiyatYerTutucu,@UrunIsimYerTutucu,@UrunAciklamaYerTutucu,@UrunStatusYerTutucu);
+            
+            DECLARE @YeniUrunId int = SCOPE_IDENTITY();
+
+            Insert Into UrunKategori (UrunId, kategoriId) values (@YeniUrunId, @KategoriIdYerTutucu)";
 
             using (SqlConnection baglanti = _dal.benimSqlBaglantim)
             {
@@ -260,6 +267,7 @@ namespace PresentationLayer.Controllers
                     emir.Parameters.AddWithValue("@UrunIsimYerTutucu", UrunIsimParametre);
                     emir.Parameters.AddWithValue("@UrunAciklamaYerTutucu", UrunAciklamaParametre);
                     emir.Parameters.AddWithValue("@UrunStatusYerTutucu", UrunStatusParametre);
+                    emir.Parameters.AddWithValue("@KategoriIdYerTutucu", KategoriIdParametre);
 
                     baglanti.Open();
 

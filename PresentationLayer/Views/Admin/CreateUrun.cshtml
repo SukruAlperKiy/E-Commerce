@@ -1,8 +1,9 @@
-﻿
+﻿@using System.Data
 
 @{
     ViewData["Title"] = "CreateUrun";
     Layout = "~/Views/AdminLayout/Index.cshtml";
+    DataSet KategorilerSelectDataSet = ViewBag.KategorilerSelectViewBag as DataSet;
 }
 
 
@@ -53,6 +54,18 @@
                          <div class="col-md-3">
                             <label>Urun Fiyat</label>
                             <input type="number" class="form-control" name="UrunFiyatParametre" step="0.01" min="0" placeholder="Urun Fiyat"/>
+                         </div>
+                         <br />
+
+                         <div class="col-md-6">
+                             <select class="form-control" name="KategoriIdParametre" placeholder="Kategori Secin">
+                                    @{
+                                        foreach (DataRow sira in KategorilerSelectDataSet.Tables[0].Rows)
+                                        {
+                                            <option value="@sira["kategoriId"]">@sira["kategoriIsim"]</option>
+                                        }
+                                    }
+                             </select>
                          </div>
                         
                          <br />
