@@ -95,41 +95,62 @@
 
 
 <script>
+    // buradaki "Map()" kodu verileri (key(id), value(string vb.)) seklinde tutar. peki birden fazla value alabilir mi?
+    // secilen butun kategori verileri bu "Map()" icinde tutulur. ornek: 14=Elektronik, 27=Giyim, 8=Mobilya
     const IdveIsimAlanMapKismi = new Map();
 
+
+    // burasi kullanici dropdownda secim yaptiginda tetiklenir. 
     document.getElementById('KategoriSec').addEventListener('change', function () {
+// buradaki "const id" secilen <option value = 1> den 'value' degerini alir yani 1.
         const id = this.value;
+// "const isim" ise secilen degerin ekranda gorulen metnini alir.
         const isim = this.options[this.selectedIndex].text;
 
-        // Boşsa veya zaten seçildiyse işlem yapma
+        // id bossa veya daha onceden o id secildiyse
         if (id == false || IdveIsimAlanMapKismi.has(id)) {
+        //  bu kod dropdown menuyu sifirlamaya yariyor. yinede sor.
             this.value = '';
             return;
         }
 
+    //  Kontrol alani gecildi. o halde id ve isim'i Map()'e kaydet.
         IdveIsimAlanMapKismi.set(id, isim);
+    // "renderButonlar();" fonksiyonu "Map()" icinde bulunan verileri ekrana cizer.
         renderButonlar();
         this.value = ''; // Dropdown'ı sıfırla, tekrar seçilebilsin
     });
 
     function renderButonlar() {
-        const alan = document.getElementById('olusanButon');
-        alan.innerHTML = '';
+    // bu kod "document.getElementById('olusanButon');" butonlarin konulacagi alani buluyor.
+        const butonlarinKonulacagiAlan = document.getElementById('olusanButon');
+    // bu kod "Map()" icindeki tum butonlari her seferinde ekrana yeniden yazmasin diye ekliyoruz.
+    // bu alana her seferinde sadece secilen yazilsin diye ekledik.
+        butonlarinKonulacagiAlan.innerHTML = '';
 
-        IdveIsimAlanMapKismi.forEach((isim, id) => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'Kategori-Silme-Butonu mt-1 me-1';
-            btn.dataset.kategoriId = id;
-            btn.textContent = isim;
 
-            // Butona tıklanınca o kategoriyi kaldır
-            btn.addEventListener('click', () => {
-                IdveIsimAlanMapKismi.delete(id);
-                renderButonlar();
+
+        // Hafızadaki her bir kategori için aşağıdaki işlemleri sırasıyla yap:
+        IdveIsimAlanMapKismi.forEach(function(isim, id) {
+
+            // 1. Yeni bir buton elementi üret
+            const _Buton = document.createElement('button');
+
+            // 2. Butonun özelliklerini ve görsel ayarlarını belirle
+            _Buton.type = 'button';
+            _Buton.className = 'Kategori-Silme-Butonu mt-1 me-1';
+            _Buton.dataset.kategoriId = id; // Arka planda ID'sini sakla
+            _Buton.textContent = isim;      // Üzerinde görünecek metni (Kategori ismini) yaz
+
+            // 3. Butona tıklandığında ne olacağını söyle (Silme görevi ver)
+            _Buton.addEventListener('click', function() {
+                IdveIsimAlanMapKismi.delete(id); // Hafızadan bu ID'yi sil. ayni zamanda Id = kategoriId oldugundan, secili kategoriId'yi de siler.
+                renderButonlar();                // Ekranı temizleyip güncel haliyle yeniden çiz
             });
 
-            alan.appendChild(btn);
+            // 4. Hazırlanan ve görevi verilen bu butonu ekrandaki alanın içine yerleştir
+            butonlarinKonulacagiAlan.appendChild(_Buton);
+
         });
     }
 </script>
