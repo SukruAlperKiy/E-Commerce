@@ -207,7 +207,7 @@ namespace PresentationLayer.Controllers
 
         public IActionResult DeleteCategories(int id)
         {
-            string DeleteKategoriQuery = $"Delete from Kategoriler where kategoriId = @kategoriIdYerTutucu";
+            string DeleteKategoriQuery = $"Delete from Kategoriler where kategoriId = @kategoriIdYerTutucu; Delete From UrunKategori where kategoriId = @kategoriIdYerTutucu";
 
             using (SqlConnection baglanti = _dal.benimSqlBaglantim)
             {
@@ -291,19 +291,18 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUrun(decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre, int KategoriIdParametre)
+        public IActionResult CreateUrun(decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre, int[] KategoriIdParametre)
         {
 
-
-        //  "DECLARE @YeniUrunId int = SCOPE_IDENTITY();" Urun olustururken urune id vermedigimizden cekebilecegimiz bir id yok. bu yuzden bu kod databaseye verecegimiz id'yi kendisi hepsalayip @YeniUrunId kismina yaziyor.
-            string UrunEklemeQuery = @"Insert into Urunler 
+            //  "DECLARE @YeniUrunId int = SCOPE_IDENTITY();" Urun olustururken urune id vermedigimizden cekebilecegimiz bir id yok. bu yuzden bu kod databaseye verecegimiz id'yi kendisi hepsalayip @YeniUrunId kismina yaziyor.
+            string UrunEklemeQuery = @$"Insert into Urunler 
             (UrunFiyat, UrunIsim, UrunAciklama, UrunStatus) 
             VALUES 
             (@UrunFiyatYerTutucu,@UrunIsimYerTutucu,@UrunAciklamaYerTutucu,@UrunStatusYerTutucu);
             
-            DECLARE @YeniUrunId int = SCOPE_IDENTITY();
+            Select SCOPE_IDENTITY();";
 
-            Insert Into UrunKategori (UrunId, kategoriId) values (@YeniUrunId, @KategoriIdYerTutucu)";
+            int yeniUrunId;
 
             using (SqlConnection baglanti = _dal.benimSqlBaglantim)
             {
@@ -313,21 +312,34 @@ namespace PresentationLayer.Controllers
                     emir.Parameters.AddWithValue("@UrunIsimYerTutucu", UrunIsimParametre);
                     emir.Parameters.AddWithValue("@UrunAciklamaYerTutucu", UrunAciklamaParametre);
                     emir.Parameters.AddWithValue("@UrunStatusYerTutucu", UrunStatusParametre);
-                    emir.Parameters.AddWithValue("@KategoriIdYerTutucu", KategoriIdParametre);
 
                     baglanti.Open();
-
-                    emir.ExecuteNonQuery();
+                    //  bu "emir.ExecuteScalar" kodu sqlde son yapilan islemin sonucunu getir diyormus.
+                    //  SQL'de son yaptigimiz islem de "SELECT SCOPE_IDENTITY()" oldugundan bize yeni olusturulan urunun UrunId'sini getirdi.
+                    yeniUrunId = Convert.ToInt32(emir.ExecuteScalar());
                 }
 
-            }
+                string KategoriIdEkleQuery = $@"Insert Into UrunKategori
+                (UrunId, kategoriId)
+                values 
+                (@yeniUrunIdYerTutucu, @kategoriIdYerTutucu)";
 
+                foreach (int eklenenKategoriId in KategoriIdParametre)
+                {
+                    using (SqlCommand emir2 = new SqlCommand(KategoriIdEkleQuery, baglanti))
+                    {
+                        emir2.Parameters.AddWithValue("@yeniUrunIdYerTutucu", yeniUrunId);
+                        emir2.Parameters.AddWithValue("@kategoriIdYerTutucu", eklenenKategoriId);
+                        emir2.ExecuteNonQuery();
+                    }
+                }
+            }
                 return RedirectToAction("UrunlerSelect");
         }
 
         public IActionResult UrunDelete(int id)
         {
-            string UrunSilmeQuery = $"Delete from Urunler where UrunId = @idTutucu";
+            string UrunSilmeQuery = $"Delete from Urunler where UrunId = @idTutucu; Delete from UrunKategori where UrunId = @idTutucu";
 
             using (SqlConnection baglanti = _dal.benimSqlBaglantim)
             {

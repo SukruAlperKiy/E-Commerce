@@ -59,7 +59,7 @@
 
                          <div class="col-md-6">
                              <label>Kategori</label>
-                             <select class="form-control" id="KategoriSec" name="KategoriIdParametre" placeholder="Kategori Secin">
+                             <select class="form-control" id="KategoriSec" placeholder="Kategori Secin">
                                     <option value="">Kategori Secin</option>
                                     @{
                                         foreach (DataRow sira in KategorilerSelectDataSet.Tables[0].Rows)
@@ -82,7 +82,7 @@
                              </select>
                          </div>
                          <br />
-                         <button type="submit" class="Kategori-Silme-Butonu mt-3">Urun Ekle</button>
+                         <button type="submit" class="btn btn-primary">Urun Ekle</button>
                          
 
                      </form>
@@ -128,28 +128,28 @@
     // bu alana her seferinde sadece secilen yazilsin diye ekledik.
         butonlarinKonulacagiAlan.innerHTML = '';
 
-
-
-        // Hafızadaki her bir kategori için aşağıdaki işlemleri sırasıyla yap:
         IdveIsimAlanMapKismi.forEach(function(isim, id) {
 
-            // 1. Yeni bir buton elementi üret
-            const _Buton = document.createElement('button');
 
-            // 2. Butonun özelliklerini ve görsel ayarlarını belirle
+            const _Buton = document.createElement('button');
             _Buton.type = 'button';
             _Buton.className = 'Kategori-Silme-Butonu mt-1 me-1';
-            _Buton.dataset.kategoriId = id; // Arka planda ID'sini sakla
-            _Buton.textContent = isim;      // Üzerinde görünecek metni (Kategori ismini) yaz
+            _Buton.textContent = isim;      
 
-            // 3. Butona tıklandığında ne olacağını söyle (Silme görevi ver)
             _Buton.addEventListener('click', function() {
-                IdveIsimAlanMapKismi.delete(id); // Hafızadan bu ID'yi sil. ayni zamanda Id = kategoriId oldugundan, secili kategoriId'yi de siler.
-                renderButonlar();                // Ekranı temizleyip güncel haliyle yeniden çiz
+                IdveIsimAlanMapKismi.delete(id); 
+                renderButonlar();                
             });
 
-            // 4. Hazırlanan ve görevi verilen bu butonu ekrandaki alanın içine yerleştir
             butonlarinKonulacagiAlan.appendChild(_Buton);
+
+            const kategoriIdGonder = document.createElement("input")
+            kategoriIdGonder.type = 'hidden';
+            kategoriIdGonder.name = "KategoriIdParametre";
+            kategoriIdGonder.value = id;
+
+            butonlarinKonulacagiAlan.appendChild(kategoriIdGonder);
+
 
         });
     }
