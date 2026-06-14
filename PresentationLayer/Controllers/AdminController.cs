@@ -237,13 +237,13 @@ namespace PresentationLayer.Controllers
 
         public IActionResult UrunlerUpdateGet(int id)
         {
-            string urunlerGetSql = $"Select UrunId, UrunFiyat, UrunIsim, UrunAciklama, UrunStatus from Urunler where UrunId = {id}";
+            string urunlerGetSql = $"Select UrunId, UrunFiyat, UrunIsim, UrunAciklama, UrunStatus from Urunler where UrunId = {id}; select UrunKategoriId, UrunId, kategoriId from UrunKategori where UrunId = {id}; Select kategoriId, kategoriIsim, kategoriStatus from Kategoriler";
             ViewBag.UrunUpdateGetViewBag = _dal.CommandExecuteReader(urunlerGetSql, _dal.benimSqlBaglantim);
             return View();
         }
 
         [HttpPost]
-        public IActionResult UrunlerUpdatePost(int UrunIdParametre, decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre)
+        public IActionResult UrunlerUpdatePost(int UrunIdParametre, decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre, int[] KategoriIdParametre)
         {
             if (UrunFiyatParametre <= 0 || 
                 string.IsNullOrEmpty(UrunIsimParametre) ||
@@ -252,7 +252,7 @@ namespace PresentationLayer.Controllers
                 string UrunlerUpdateOncesi = $"Select UrunFiyat, UrunIsim, UrunAciklama, UrunStatus from Urunler where UrunId = {UrunIdParametre}";
                 ViewBag.UrunlerUpdateViewBag = _dal.CommandExecuteReader(UrunlerUpdateOncesi, _dal.benimSqlBaglantim);
 
-                return RedirectToAction("UrunlerUpdateGet");
+                return View("UrunlerUpdateGet");
             }
 
             string UrunlerUpdateSql = @"
@@ -263,19 +263,52 @@ namespace PresentationLayer.Controllers
             UrunStatus = @UrunStatusTutucu
             where UrunId = @UrunIdTutucu";
 
+            string UrunKategoriEkleQuery = $@"
+            Insert into UrunKategori 
+            (UrunId, kategoriId) 
+            Values 
+            (@UrunIdTutucu, @kategoriIdTutucu)";
+
+            string UrunKategoriSilQuery = $@"
+            Delete from UrunKategori 
+            where 
+            UrunId = @UrunIdTutucu";
+
+
             using (SqlConnection baglanti = _dal.benimSqlBaglantim)
             {
-                using (SqlCommand emir = new SqlCommand(UrunlerUpdateSql,baglanti))
+//  eger bu sekilde birden fazla emir(sqlCommand) varsa baglantiyi en tepede acman gerekiyor.
+                baglanti.Open();
+
+                using (SqlCommand emirUrunEkle = new SqlCommand(UrunlerUpdateSql,baglanti))
                 {
-                    emir.Parameters.AddWithValue("@UrunFiyatTutucu",UrunFiyatParametre);
-                    emir.Parameters.AddWithValue("@UrunIsimTutucu", UrunIsimParametre);
-                    emir.Parameters.AddWithValue("@UrunAciklamaTutucu", UrunAciklamaParametre);
-                    emir.Parameters.AddWithValue("@UrunStatusTutucu", UrunStatusParametre);
-                    emir.Parameters.AddWithValue("@UrunIdTutucu", UrunIdParametre);
+                    emirUrunEkle.Parameters.AddWithValue("@UrunFiyatTutucu",UrunFiyatParametre);
+                    emirUrunEkle.Parameters.AddWithValue("@UrunIsimTutucu", UrunIsimParametre);
+                    emirUrunEkle.Parameters.AddWithValue("@UrunAciklamaTutucu", UrunAciklamaParametre);
+                    emirUrunEkle.Parameters.AddWithValue("@UrunStatusTutucu", UrunStatusParametre);
+                    emirUrunEkle.Parameters.AddWithValue("@UrunIdTutucu", UrunIdParametre);
+                    
+                    emirUrunEkle.ExecuteNonQuery();
+                }
 
-                    baglanti.Open();
+            //  hem silineceklerin hem de ekleneceklerin "id"si ayni parametreden geldiginden.
+            //  biz secilen urunun once tum idlerini siliyoruz. sonra parametreden gelen tum "id"leri geri yukluyoruz.
+                using (SqlCommand emirUrundenKategoriSil = new SqlCommand(UrunKategoriSilQuery, baglanti))
+                {
+                    emirUrundenKategoriSil.Parameters.AddWithValue("@UrunIdTutucu", UrunIdParametre);
+                    emirUrundenKategoriSil.ExecuteNonQuery();
+                }
 
-                    emir.ExecuteNonQuery();
+                foreach (var eklenecekKategoriId in KategoriIdParametre)
+                {
+                    using (SqlCommand emirUruneKategoriEkle = new SqlCommand(UrunKategoriEkleQuery, baglanti))
+                    {
+                    
+                        emirUruneKategoriEkle.Parameters.AddWithValue("@kategoriIdTutucu", eklenecekKategoriId);
+                        emirUruneKategoriEkle.Parameters.AddWithValue("@UrunIdTutucu", UrunIdParametre);
+
+                        emirUruneKategoriEkle.ExecuteNonQuery();
+                    }
                 }
             }
                 return RedirectToAction("UrunlerSelect");

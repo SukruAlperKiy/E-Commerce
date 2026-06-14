@@ -108,7 +108,7 @@
         const isim = this.options[this.selectedIndex].text;
 
         // id bossa veya daha onceden o id secildiyse
-        if (id == false || IdveIsimAlanMapKismi.has(id)) {
+        if (id == "" || IdveIsimAlanMapKismi.has(id)) {
         //  bu kod dropdown menuyu sifirlamaya yariyor. yinede sor.
             this.value = '';
             return;

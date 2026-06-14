@@ -55,7 +55,26 @@
                             <label>Urun Fiyat</label>
                             <input type="number" class="form-control" name="UrunFiyatParametre" step="0.01" min="0" value="@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunFiyat"]" />
                          </div>
-                        
+
+
+                         <br />
+                         <div class="col-md-6">
+                             <label>Kategori</label>
+                             <select class="form-control" id="KategoriSec" placeholder="Kategori Secin">
+                                    <option value="">Kategori Secin</option>
+                                    @{
+                                        foreach (DataRow sira in UrunlerUpdateDataSet.Tables[2].Rows)
+                                        {
+                                            <option value="@sira["kategoriId"]">@sira["kategoriIsim"]</option>
+                                        }
+                                    }
+                             </select>
+                         </div>
+                         <br />
+                            <div id="olusanButon" class="margin-top: 12px;"></div>
+
+
+                         <br />
                          <br />
                          <div class="col-md-6">
                              <select class="form-control" name="UrunStatusParametre" placeholder="Aktifligi Belirleyin">
@@ -85,6 +104,87 @@
         </div>
     </div>
 </div> 
+
+
+<script>
+    // buradaki "Map()" kodu verileri (key(id), value(string vb.)) seklinde tutar. peki birden fazla value alabilir mi?
+    // secilen butun kategori verileri bu "Map()" icinde tutulur. ornek: 14=Elektronik, 27=Giyim, 8=Mobilya
+    const IdveIsimAlanMapKismi = new Map();
+    @foreach (DataRow siraUrunKategori in UrunlerUpdateDataSet.Tables[1].Rows)
+    {
+        var kategoriIsim = "";
+        
+        @foreach(DataRow siraKategori in UrunlerUpdateDataSet.Tables[2].Rows)
+        {
+            if (siraKategori["kategoriId"].ToString() == siraUrunKategori["kategoriId"].ToString())
+            {
+                kategoriIsim = siraKategori["kategoriIsim"].ToString();
+                break;
+            }
+        }
+        <text>
+                IdveIsimAlanMapKismi.set('@siraUrunKategori["kategoriId"]', '@kategoriIsim');
+        </text>
+    }
+    
+
+    // burasi kullanici dropdownda secim yaptiginda tetiklenir. 
+    document.getElementById('KategoriSec').addEventListener('change', function () {
+// buradaki "const id" secilen <option value = 1> den 'value' degerini alir yani 1.
+        const id = this.value;
+// "const isim" ise secilen degerin ekranda gorulen metnini alir.
+        const isim = this.options[this.selectedIndex].text;
+
+        // id bossa veya daha onceden o id secildiyse
+        if (id == "" || IdveIsimAlanMapKismi.has(id)) {
+        //  bu kod dropdown menuyu sifirlamaya yariyor. yinede sor.
+            this.value = '';
+            return;
+        }
+
+    //  Kontrol alani gecildi. o halde id ve isim'i Map()'e kaydet.
+        IdveIsimAlanMapKismi.set(id, isim);
+    // "renderButonlar();" fonksiyonu "Map()" icinde bulunan verileri ekrana cizer.
+        renderButonlar();
+        this.value = ''; // Dropdown'ı sıfırla, tekrar seçilebilsin
+    });
+
+    function renderButonlar() {
+    // bu kod "document.getElementById('olusanButon');" butonlarin konulacagi alani buluyor.
+        const butonlarinKonulacagiAlan = document.getElementById('olusanButon');
+    // bu kod "Map()" icindeki tum butonlari her seferinde ekrana yeniden yazmasin diye ekliyoruz.
+    // bu alana her seferinde sadece secilen yazilsin diye ekledik.
+        butonlarinKonulacagiAlan.innerHTML = '';
+
+        IdveIsimAlanMapKismi.forEach(function(isim, id) {
+
+            const _Buton = document.createElement('button');
+            _Buton.type = 'button';
+            _Buton.className = 'Kategori-Silme-Butonu mt-1 me-1';
+            _Buton.textContent = isim;
+            _Buton.addEventListener('click', function() {
+                IdveIsimAlanMapKismi.delete(id); 
+                renderButonlar();                
+            });
+            butonlarinKonulacagiAlan.appendChild(_Buton);
+
+            const kategoriIdGonder = document.createElement("input")
+            kategoriIdGonder.type = 'hidden';
+            kategoriIdGonder.name = "KategoriIdParametre";
+            kategoriIdGonder.value = id;
+
+            butonlarinKonulacagiAlan.appendChild(kategoriIdGonder);
+
+
+        });
+    }
+
+    // Sayfa yuklenince mevcut kategorileri ekrana ciz
+    document.addEventListener('DOMContentLoaded', function () {
+        renderButonlar();
+    });
+</script>
+
 
 
 
