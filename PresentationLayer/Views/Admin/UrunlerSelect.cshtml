@@ -40,13 +40,11 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th scope="col">Urun Fiyat</th>
-                                    <th scope="col">Urun Ismi</th>
-                                    <th scope="col">Urun Aciklamasi</th>
-                                    <th scope="col">Urun Status</th>
-                                    <th scope="col">Kategori</th>
-                                    @* <th scope="col">Guncelle</th>
-                                    <th scope="col">Sil</th> *@
+                                    <th scope="col">Kapak Resim</th>
+                                    <th scope="col">Isim</th>
+                                    <th scope="col">Fiyat</th>
+                                    <th scope="col">Aciklama</th>
+                                    <th scope="col">Urun Aktiflik</th>
                                 </tr>
                             </thead>
                             @if (UrunlerDataSet != null && UrunlerDataSet.Tables.Count > 0 && UrunlerDataSet.Tables[0].Rows.Count > 0)
@@ -55,8 +53,9 @@
                                     @foreach (DataRow sira in UrunlerDataSet.Tables[0].Rows)
                                     {
                                         <tr>
-                                            <td class="text-muted">@sira["UrunFiyat"]</td>
+                                            <td class="text-muted"><img src="@sira["UrunlerKapakFoto1"]" style="width:60px; height:60px; object-fit:cover; border-radius:4px;"/></td>
                                             <td class="text-muted">@sira["UrunIsim"]</td>
+                                            <td class="text-muted">@sira["UrunFiyat"]</td>
                                             <td class="text-muted">@sira["UrunAciklama"]</td>
                                             <td class="text-muted">@sira["UrunStatus"]</td>
 
@@ -80,5 +79,6 @@
         </div>
     </div>
 </div> 
+
 
 

@@ -229,7 +229,7 @@ namespace PresentationLayer.Controllers
 
         public IActionResult UrunlerSelect()
         {
-            string urunSelectSql = "Select UrunId, UrunFiyat, UrunIsim, UrunAciklama, UrunStatus from Urunler";
+            string urunSelectSql = "Select UrunId, UrunFiyat, UrunIsim, UrunAciklama, UrunlerKapakFoto1, UrunStatus from Urunler";
             ViewBag.UrunSelectViewBag = _dal.CommandExecuteReader(urunSelectSql, _dal.benimSqlBaglantim);
 
             return View();
@@ -324,14 +324,41 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUrun(decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre, int[] KategoriIdParametre)
+        public IActionResult CreateUrun(decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre, int[] KategoriIdParametre, IFormFile UrunKapakFotoUrlParametre)
         {
+            string fotoUrl = null;
+
+            if (UrunKapakFotoUrlParametre != null && UrunKapakFotoUrlParametre.Length > 0)
+            {
+                string uzantiExtension = Path.GetExtension(UrunKapakFotoUrlParametre.FileName).ToLower();
+
+                string[] izinVerilenUzantilar = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+
+                if (izinVerilenUzantilar.Contains(uzantiExtension) == false)
+                {
+                    ViewBag.Error = "Sadece jpg, jpeg, png, gif, webp yüklenebilir.";
+                    return View();
+                }
+
+                string dosyaIsmi = Guid.NewGuid().ToString() + uzantiExtension;
+
+                string dosyaYolu = Path.Combine(_webHostiongEnviroment.WebRootPath, "Photos", "UrunKapak");
+
+                string tamYol = Path.Combine(dosyaYolu, dosyaIsmi);
+
+                using (var dosyaKaydetmeAkisi = new FileStream(tamYol, FileMode.Create))
+                {
+                    UrunKapakFotoUrlParametre.CopyTo(dosyaKaydetmeAkisi);
+                }
+
+                fotoUrl = "/Photos/UrunKapak" + dosyaIsmi;
+            }
 
             //  "DECLARE @YeniUrunId int = SCOPE_IDENTITY();" Urun olustururken urune id vermedigimizden cekebilecegimiz bir id yok. bu yuzden bu kod databaseye verecegimiz id'yi kendisi hepsalayip @YeniUrunId kismina yaziyor.
             string UrunEklemeQuery = @$"Insert into Urunler 
-            (UrunFiyat, UrunIsim, UrunAciklama, UrunStatus) 
+            (UrunFiyat, UrunIsim, UrunAciklama, UrunStatus, UrunlerKapakFoto1) 
             VALUES 
-            (@UrunFiyatYerTutucu,@UrunIsimYerTutucu,@UrunAciklamaYerTutucu,@UrunStatusYerTutucu);
+            (@UrunFiyatYerTutucu, @UrunIsimYerTutucu,@UrunAciklamaYerTutucu, @UrunStatusYerTutucu, @UrunKapakYerTutucu);
             
             Select SCOPE_IDENTITY();";
 
@@ -345,6 +372,7 @@ namespace PresentationLayer.Controllers
                     emir.Parameters.AddWithValue("@UrunIsimYerTutucu", UrunIsimParametre);
                     emir.Parameters.AddWithValue("@UrunAciklamaYerTutucu", UrunAciklamaParametre);
                     emir.Parameters.AddWithValue("@UrunStatusYerTutucu", UrunStatusParametre);
+                    emir.Parameters.AddWithValue("@UrunKapakYerTutucu", fotoUrl);
 
                     baglanti.Open();
                     //  bu "emir.ExecuteScalar" kodu sqlde son yapilan islemin sonucunu getir diyormus.
