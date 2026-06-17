@@ -237,22 +237,50 @@ namespace PresentationLayer.Controllers
 
         public IActionResult UrunlerUpdateGet(int id)
         {
-            string urunlerGetSql = $"Select UrunId, UrunFiyat, UrunIsim, UrunAciklama, UrunStatus from Urunler where UrunId = {id}; select UrunKategoriId, UrunId, kategoriId from UrunKategori where UrunId = {id}; Select kategoriId, kategoriIsim, kategoriStatus from Kategoriler";
+            string urunlerGetSql = $"Select UrunId, UrunFiyat, UrunIsim, UrunAciklama, UrunStatus, UrunlerKapakFoto1 from Urunler where UrunId = {id}; select UrunKategoriId, UrunId, kategoriId from UrunKategori where UrunId = {id}; Select kategoriId, kategoriIsim, kategoriStatus from Kategoriler";
             ViewBag.UrunUpdateGetViewBag = _dal.CommandExecuteReader(urunlerGetSql, _dal.benimSqlBaglantim);
             return View();
         }
 
         [HttpPost]
-        public IActionResult UrunlerUpdatePost(int UrunIdParametre, decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre, int[] KategoriIdParametre)
+        public IActionResult UrunlerUpdatePost(int UrunIdParametre, decimal UrunFiyatParametre, string UrunIsimParametre, string UrunAciklamaParametre, int UrunStatusParametre, int[] KategoriIdParametre, IFormFile UrunKapakFotoUrlParametre, string mevcutFotografParametre)
         {
             if (UrunFiyatParametre <= 0 || 
                 string.IsNullOrEmpty(UrunIsimParametre) ||
                 string.IsNullOrEmpty(UrunAciklamaParametre))
             {
-                string UrunlerUpdateOncesi = $"Select UrunFiyat, UrunIsim, UrunAciklama, UrunStatus from Urunler where UrunId = {UrunIdParametre}";
+                string UrunlerUpdateOncesi = $"Select UrunFiyat, UrunIsim, UrunAciklama, UrunStatus, UrunlerKapakFoto1 from Urunler where UrunId = {UrunIdParametre}";
                 ViewBag.UrunlerUpdateViewBag = _dal.CommandExecuteReader(UrunlerUpdateOncesi, _dal.benimSqlBaglantim);
 
                 return View("UrunlerUpdateGet");
+            }
+
+            string fotoUrl = mevcutFotografParametre;
+
+            if (UrunKapakFotoUrlParametre != null && UrunKapakFotoUrlParametre.Length > 0)
+            {
+                string uzantiExtension = Path.GetExtension(UrunKapakFotoUrlParametre.FileName).ToLower();
+
+                string[] izinVerilenUzantilar = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+
+                if (izinVerilenUzantilar.Contains(uzantiExtension) == false)
+                {
+                    ViewBag.Error = "Sadece jpg, jpeg, png, gif, webp yüklenebilir.";
+                    return View();
+                }
+
+                string dosyaIsmi = Guid.NewGuid().ToString() + uzantiExtension;
+
+                string dosyaYolu = Path.Combine(_webHostiongEnviroment.WebRootPath, "Photos", "UrunKapak");
+
+                string tamYol = Path.Combine(dosyaYolu, dosyaIsmi);
+
+                using (var dosyaKaydetmeAkisi = new FileStream(tamYol, FileMode.Create))
+                {
+                    UrunKapakFotoUrlParametre.CopyTo(dosyaKaydetmeAkisi);
+                }
+
+                fotoUrl = "/Photos/UrunKapak/" + dosyaIsmi;
             }
 
             string UrunlerUpdateSql = @"
@@ -260,7 +288,8 @@ namespace PresentationLayer.Controllers
             UrunFiyat = @UrunFiyatTutucu,
             UrunIsim = @UrunIsimTutucu,
             UrunAciklama = @UrunAciklamaTutucu,
-            UrunStatus = @UrunStatusTutucu
+            UrunStatus = @UrunStatusTutucu,
+            UrunlerKapakFoto1 = @UrunlerKapakFoto1Tutucu
             where UrunId = @UrunIdTutucu";
 
             string UrunKategoriEkleQuery = $@"
@@ -286,6 +315,7 @@ namespace PresentationLayer.Controllers
                     emirUrunEkle.Parameters.AddWithValue("@UrunIsimTutucu", UrunIsimParametre);
                     emirUrunEkle.Parameters.AddWithValue("@UrunAciklamaTutucu", UrunAciklamaParametre);
                     emirUrunEkle.Parameters.AddWithValue("@UrunStatusTutucu", UrunStatusParametre);
+                    emirUrunEkle.Parameters.AddWithValue("@UrunlerKapakFoto1Tutucu", fotoUrl);
                     emirUrunEkle.Parameters.AddWithValue("@UrunIdTutucu", UrunIdParametre);
                     
                     emirUrunEkle.ExecuteNonQuery();
@@ -351,7 +381,7 @@ namespace PresentationLayer.Controllers
                     UrunKapakFotoUrlParametre.CopyTo(dosyaKaydetmeAkisi);
                 }
 
-                fotoUrl = "/Photos/UrunKapak" + dosyaIsmi;
+                fotoUrl = "/Photos/UrunKapak/" + dosyaIsmi;
             }
 
             //  "DECLARE @YeniUrunId int = SCOPE_IDENTITY();" Urun olustururken urune id vermedigimizden cekebilecegimiz bir id yok. bu yuzden bu kod databaseye verecegimiz id'yi kendisi hepsalayip @YeniUrunId kismina yaziyor.

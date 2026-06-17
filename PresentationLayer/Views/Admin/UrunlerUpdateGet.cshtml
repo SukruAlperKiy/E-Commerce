@@ -5,6 +5,21 @@
     Layout = "~/Views/AdminLayout/Index.cshtml";
     DataSet UrunlerUpdateDataSet = ViewBag.UrunUpdateGetViewBag as DataSet;
 }
+<style>
+    /* Örnek projedeki yükleme alanının şık görünmesi için küçük bir stil */
+    .yukleme-alani-benimStyle {
+        border: 2px dashed #dee2e6;
+        padding: 25px;
+        text-align: center;
+        border-radius: 8px;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+    }
+    .yukleme-alani-benimStyle:hover {
+        background: #e9ecef;
+    }
+</style>
 
 
 <div class="container">
@@ -38,8 +53,9 @@
                     <div class="card-title">Yeni One Cikan Kategori Guncelle</div>
                   </div>
                   <div class="card-body">
-                     <form role="form" action="/admin/UrunlerUpdatePost" method="post">
+                     <form role="form" action="/admin/UrunlerUpdatePost" method="post" enctype="multipart/form-data">
                          <input type="hidden" name="UrunIdParametre" value="@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunId"]">
+                         <input type="hidden" name="mevcutFotografParametre" value="@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunlerKapakFoto1"]">
                          
                          <div class="col-md-12">
                              <label>Urun Ismi</label>
@@ -55,9 +71,31 @@
                             <label>Urun Fiyat</label>
                             <input type="number" class="form-control" name="UrunFiyatParametre" step="0.01" min="0" value="@UrunlerUpdateDataSet.Tables[0].Rows[0]["UrunFiyat"]" />
                          </div>
+                         <br /><br />
+                         <div class="col-md-6">
+                            <label class="form-label d-block mb-2">Kapak Fotografi Guncelle</label>
+                            <div class="yukleme-alani-benimStyle" onclick="document.getElementById('fileInput').click()">
+                                <p class="mb-1 fw-bold">Tiklayin Veya Resmi Buraya Surukleyip Birakin</p>
+                                <p class="text-muted small mb-0">PNG, JPG, WEBP (Maks. 5MB)</p>
+                                <input type="file" class="d-none" id="fileInput" name="UrunKapakFotoUrlParametre" accept="image/*" onchange="yuklenenResmiGoruntule(event)"/>   
+                            </div>
+                        </div>
 
 
+
+                        <div class="col-md-6">
+                            <label class="form-label d-block mb-2 fw-bold"> Mevcut Kapak Fotograf </label>
+                            <div class="p-2 border rounded bg-light text-center" style="min-height: 145px; display: flex; align-items: center; justify-content: center;">
+                                    @foreach (DataRow sira in UrunlerUpdateDataSet.Tables[0].Rows)
+                                    {
+                                        <img id="onizleme" src="@sira["UrunlerKapakFoto1"]" style="max-width:100%; max-height:130px; height:auto; border-radius:6px; object-fit: contain;" />
+
+                                    }
+                            </div>
+                        </div>
+                        <br />
                          <br />
+
                          <div class="col-md-6">
                              <label>Kategori</label>
                              <select class="form-control" id="KategoriSec" placeholder="Kategori Secin">
@@ -105,6 +143,33 @@
     </div>
 </div> 
 
+<script>
+    function yuklenenResmiGoruntule(event) {
+        const secilenIlkDosya = event.target.files[0]; // Seçilen ilk dosyayı al
+        const onizleme = document.getElementById('onizleme'); // Resim etiketini yakala
+
+        if (!secilenIlkDosya) return;
+
+        // 1. GÜVENLİK KONTROLÜ: Seçilen şey gerçekten resim mi?
+        if (!secilenIlkDosya.type.startsWith('image/')) {
+            alert("Lütfen geçerli bir resim dosyası seçiniz.");
+            event.target.value = ""; // Seçimi temizle
+            return;
+        }
+
+        // 2. BOYUT KONTROLÜ: Resim 5MB'tan büyük mü?
+        const maxBuyukluk = 5 * 1024 * 1024; // 5 Megabayt bayt cinsinden
+        if (secilenIlkDosya.size > maxBuyukluk) {
+            alert("Seçtiğiniz resim 5MB'tan küçük olmalıdır.");
+            event.target.value = ""; // Seçimi temizle
+            return;
+        }
+
+        // 3. ANLIK ÖNİZLEME OLUŞTURMA
+        const url = URL.createObjectURL(secilenIlkDosya); // Seçilen resmi tarayıcı hafızasında geçici bir linke dönüştür
+        onizleme.src = url; // Ekrandaki mevcut resmin yerine bu yeni geçici linki bas
+    }
+</script>
 
 <script>
     // buradaki "Map()" kodu verileri (key(id), value(string vb.)) seklinde tutar. peki birden fazla value alabilir mi?
