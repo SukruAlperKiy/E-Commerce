@@ -1,17 +1,24 @@
 ﻿@model List<PresentationLayer.Models.Urunler1Model>
 
+    <style>
+        .cok-satan-urunler-baslik-rengi h2{
+            color: #FF8C00;
+        }
+
+    </style>
 
 <section class="new_arrivals_area section-padding-80 clearfix">
-        <div class="container">
+        <div class="container-fluid px-5">
             <div class="row">
                 <div class="col-12">
-                    <div class="section-heading text-center">
-                        <h2>Popular Products</h2>
+                    <div class="section-heading text-left">
+                        <h2 style="color: #FF8C00;">Çok Satan Ürünler</h2>
+                        <p style="color: #000000"><strong>Müşterilerimizin en çok tercih ettiği ürünleri görmek ister misiniz?</strong></p>
                     </div>
                 </div>
             </div>
         </div>
-    <!-- bu "container-fluid" kodu ekranin sagginda ve solunda hic bosluk kalmamasini sagliyor. -->
+    <!-- bu "container-fluid" kodu ekranin sagginda ve solunda hic bosluk kalmamasini sagliyor. (eskiden container vardi.)-->
         <div class="container-fluid px-5">
             <div class="row">
                 <div class="col-12">
@@ -22,7 +29,7 @@
                         <div class="single-product-wrapper">
                             <div class="product-img">
                                 <img src="@deger.urunlerKapakFoto" alt="">
-                                <img class="hover-img" src="/BUDUR-e-commerce/img/product-img/product-2.jpg" alt="">
+                                <img class="hover-img" src="/BUDUR-e-commerce/img/product-img/product-4.jpg" alt="">
                                 @* <div class="product-favourite">
                                     <a href="#" class="favme fa fa-heart"></a>
                                 </div> *@

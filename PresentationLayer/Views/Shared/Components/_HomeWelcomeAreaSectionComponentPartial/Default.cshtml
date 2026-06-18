@@ -1,42 +1,6 @@
 ﻿@model List<EntityLayer.Concrete.Slider>
 
-<div class="tekno-slider-wrapper">
-    <div class="tekno-slider" id="mainSlider">
-
-        @for (int i = 0; i < Model.Count; i++)
-        {
-            <div class="tekno-slide @(i == 0 ? "active" : "")"
-                 style="background-image: url('@Model[i].ImageUrl');">
-                <div class="slide-overlay"></div>
-                <div class="slide-content">
-                    <span class="slide-kucuk-title">@Model[i].SliderKucukTitle</span>
-                    <h2 class="slide-title">@Model[i].SliderTitle</h2>
-                </div>
-            </div>
-        }
-
-        <!-- Sol / Sağ Oklar -->
-        <button class="slider-btn slider-prev" onclick="changeSlide(-1)" aria-label="Önceki">
-            &#8249;
-        </button>
-        <button class="slider-btn slider-next" onclick="changeSlide(1)" aria-label="Sonraki">
-            &#8250;
-        </button>
-
-        <!-- Nokta Navigasyon -->
-        <div class="slider-dots">
-            @for (int i = 0; i < Model.Count; i++)
-            {
-                <button class="dot @(i == 0 ? "active" : "")"
-                        onclick="goToSlide(@i)"
-                        aria-label="Slayt @(i+1)">
-                </button>
-            }
-        </div>
-    </div>
-</div>
-
-<style>
+    @* <style>
     /* ── Wrapper ── */
     .tekno-slider-wrapper {
         width: 100%;
@@ -181,6 +145,44 @@
     }
 </style>
 
+<div class="tekno-slider-wrapper">
+    <div class="tekno-slider" id="mainSlider">
+
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="tekno-slide @(i == 0 ? "active" : "")"
+                 style="background-image: url('@Model[i].ImageUrl');">
+                <div class="slide-overlay"></div>
+                <div class="slide-content">
+                    <span class="slide-kucuk-title">@Model[i].SliderKucukTitle</span>
+                    <h2 class="slide-title">@Model[i].SliderTitle</h2>
+                </div>
+            </div>
+        }
+
+        <!-- Sol / Sağ Oklar -->
+        <button class="slider-btn slider-prev" onclick="changeSlide(-1)" aria-label="Önceki">
+            &#8249;
+        </button>
+        <button class="slider-btn slider-next" onclick="changeSlide(1)" aria-label="Sonraki">
+            &#8250;
+        </button>
+
+        <!-- Nokta Navigasyon -->
+        <div class="slider-dots">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <button class="dot @(i == 0 ? "active" : "")"
+                        onclick="goToSlide(@i)"
+                        aria-label="Slayt @(i+1)">
+                </button>
+            }
+        </div>
+    </div>
+</div>
+
+
+
 <script>
     (function () {
         const slider = document.getElementById('mainSlider');
@@ -215,7 +217,7 @@
 
         resetTimer();
     })();
-</script>
+</script> *@
 
 
 
@@ -246,20 +248,20 @@
 
 
 
-@* <section class="welcome_area bg-img background-overlay" style="background-image: url(/BUDUR-e-commerce/img/bg-img/bg-1.jpg);">
+ <section class="welcome_area bg-img background-overlay" style="background-image: url(@Model[0].ImageUrl);">
         <div class="container h-100">
             <div class="row h-100 align-items-center">
                 <div class="col-12">
                     <div class="hero-content">
                     @foreach (var esya in Model)
                     {
-                        <h6>@esya.SliderKucukTitle</h6>
-                        <h2>@esya.SliderTitle</h2>
+                        @* <h6>@esya.SliderKucukTitle</h6>
+                        <h2>@esya.SliderTitle</h2> *@
                         //<a href="/sliders/sliderlist/" class="btn essence-btn">@esya.ImageUrl</a>
-                        <img class="w-100" src="@esya.ImageUrl" alt="Image">
+                        @* <img class="w-100" src="@esya.ImageUrl" alt="Image"> *@
                     } 
                     </div>
                 </div>
             </div>
         </div>
-    </section> *@
+    </section> 
