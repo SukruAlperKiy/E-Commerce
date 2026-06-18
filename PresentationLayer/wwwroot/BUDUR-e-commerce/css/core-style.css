@@ -740,7 +740,13 @@ img {
   z-index: 1;
   margin-bottom: 50px;
   overflow: hidden;
-  background-color: #ffffff; }
+  background-color: #ffffff; 
+  /*Her urune kenar verme kodu*/
+  border: 1px solid #e1e1e1;
+  border-radius: 20px;
+  padding: 20px;
+
+}
   .single-product-wrapper .product-img {
     position: relative;
     z-index: 1;

@@ -36,6 +36,8 @@
       @await Component.InvokeAsync("_AdminScriptsLayoutComponentPartial")
    <!-- End Scripts -->
 
+   <!-- bu kodun ne ise yaradigini bilmiyorum. -->
+   @await RenderSectionAsync("Scripts", required: false)
   </body>
 </html>
 

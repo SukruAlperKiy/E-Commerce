@@ -81,7 +81,29 @@
                             <img id="resimOnizleme" class="d-none mt-2" style="max-width:100%; max-height:200px; border-radius:6px; object-fit: contain;" alt="Önizleme" />
                         </div>
                         <br />
+
+                        <div class="modal fade" id="cropModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Kapak Fotoğrafını Ayarla</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div style="max-height: 450px; overflow: hidden;">
+                                            <img id="modalResim" src="" style="display: block; max-width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                        <button type="button" class="btn btn-primary" id="btnKirpVeKaydet">Resmi Kırp ve Uygula</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <br />
+
+
 
                          <div class="col-md-6">
                              <label>Kategori</label>
@@ -119,7 +141,108 @@
     </div>
 </div> 
 
+@section Scripts {
 <script>
+    // Cropper ve Modal için gerekli değişkenler
+    let cropper;
+    const fileInput = document.getElementById('fileInput');
+    const resimOnizleme = document.getElementById('resimOnizleme');
+    const modalResim = document.getElementById('modalResim');
+    const cropModalElement = document.getElementById('cropModal');
+    
+    // Bootstrap Modal nesnesi (Bootstrap 5)
+    const cropModal = new bootstrap.Modal(cropModalElement);
+
+    // Sizin mevcut fonksiyonunuz (Geliştirilmiş hali)
+    function yuklenenResmiGoruntule(event) {
+        const secilenIlkDosya = event.target.files[0];
+
+        if (secilenIlkDosya == null) return;
+
+        // 1. Kontrol: Dosya resim mi?
+        if (secilenIlkDosya.type.startsWith('image/') == false) {
+            alert("Lütfen bir resim seçiniz.");
+            event.target.value = "";
+            return;
+        }
+
+        // 2. Kontrol: Dosya boyutu 5MB'tan küçük mü?
+        const maxSize = 5 * 1024 * 1024;
+        if (secilenIlkDosya.size > maxSize) {
+            alert("Resim 5MB altı olmalı.");
+            event.target.value = "";
+            return;
+        }
+
+        // --- DOĞRULAMALAR BAŞARILIYSA BURASI ÇALIŞIR ---
+        
+        // Resmi geçici bir URL'e çevirip modal içine yüklüyoruz
+        const url = URL.createObjectURL(secilenIlkDosya);
+        modalResim.src = url;
+        
+        // Kırpma modalını açıyoruz
+        cropModal.show();
+    }
+
+    // Modal ekranda tamamen belirdiğinde Cropper'ı başlat/sıfırla
+    cropModalElement.addEventListener('shown.bs.modal', function () {
+        if (cropper) {
+            cropper.destroy(); 
+        }
+        
+        cropper = new Cropper(modalResim, {
+            aspectRatio: 600 / 600, // İstediğiniz 621x931 dikey formatı
+            viewMode: 1,            // Seçim alanının dışarı taşmasını önler
+            autoCropArea: 1,        // Resmi ilk açışta maksimum kaplayacak şekilde seçer
+            responsive: true
+        });
+    });
+
+    // "Resmi Kırp ve Uygula" butonuna basıldığında tetiklenecek olay
+    document.getElementById('btnKirpVeKaydet').addEventListener('click', function () {
+        if (!cropper) return;
+
+        // Tam olarak istediğiniz hedef boyutlarda çıktı alıyoruz
+        const canvas = cropper.getCroppedCanvas({
+            width: 600,
+            height: 600
+        });
+
+        // Kırpılan resmi Blob (Dosya) formatına çeviriyoruz
+        canvas.toBlob(function (blob) {
+            
+            // 1. Sizin kodunuzdaki önizleme alanını kırpılmış yeni resimle güncelliyoruz
+            resimOnizleme.src = URL.createObjectURL(blob);
+            resimOnizleme.classList.remove('d-none');
+
+            // 2. Dosya girdisini (input) kırpılmış sanal dosya ile değiştiriyoruz
+            // Böylece form post edildiğinde backend kırpılmış resmi alır.
+            const dosyaAdi = fileInput.files[0]?.name || "urun-kapak.jpg";
+            const yeniDosya = new File([blob], dosyaAdi, { type: "image/jpeg" });
+            
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(yeniDosya);
+            fileInput.files = dataTransfer.files; 
+
+            // Modalı kapat
+            cropModal.hide();
+        }, 'image/jpeg', 0.9); // 0.9 kalite ile sıkıştırır
+    });
+
+    // Kullanıcı kırpmadan kapatırsa temizlik yap
+    cropModalElement.addEventListener('hidden.bs.modal', function () {
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        // Eğer daha önceden onaylanmış bir önizleme resmi yoksa input'u temizle
+        if (resimOnizleme.classList.contains('d-none')) {
+            fileInput.value = '';
+        }
+    });
+</script>
+
+@* <script>
     function yuklenenResmiGoruntule(event) {
         const secilenIlkDosya = event.target.files[0];
         const onizleme = document.getElementById('resimOnizleme');
@@ -143,7 +266,7 @@
         onizleme.src = url;
         onizleme.classList.remove('d-none');
     }
-</script>
+</script> *@
 
 
 <script>
@@ -207,6 +330,6 @@
     }
 </script>
 
-
+}
 
 

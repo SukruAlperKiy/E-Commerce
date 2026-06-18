@@ -11,8 +11,9 @@
     // :: Sliders Active Code
     if ($.fn.owlCarousel) {
         $('.popular-products-slides').owlCarousel({
-            items: 4,
-            margin: 30,
+            items: 6,
+        // bu "margin" urunlerin arasindaki boslugu degistiriyor.
+            margin: 20,
             loop: true,
             nav: false,
             dots: false,
@@ -23,14 +24,20 @@
                 0: {
                     items: 1
                 },
-                576: {
+                320: {
                     items: 2
                 },
                 768: {
-                    items: 3
+                    items: 2
                 },
                 992: {
-                    items: 4
+                    items: 2
+                },
+                1024: {
+                    items: 5
+                },
+                1440: {
+                    items: 6
                 }
             }
         });

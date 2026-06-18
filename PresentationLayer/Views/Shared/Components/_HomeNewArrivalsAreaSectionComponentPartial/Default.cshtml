@@ -1,4 +1,7 @@
-﻿<section class="new_arrivals_area section-padding-80 clearfix">
+﻿@model List<PresentationLayer.Models.Urunler1Model>
+
+
+<section class="new_arrivals_area section-padding-80 clearfix">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -8,43 +11,41 @@
                 </div>
             </div>
         </div>
-
-        <div class="container">
+    <!-- bu "container-fluid" kodu ekranin sagginda ve solunda hic bosluk kalmamasini sagliyor. -->
+        <div class="container-fluid px-5">
             <div class="row">
                 <div class="col-12">
                     <div class="popular-products-slides owl-carousel">
 
-                        <!-- Single Product -->
+                    @foreach (var deger in Model)
+                    {
                         <div class="single-product-wrapper">
-                            <!-- Product Image -->
                             <div class="product-img">
-                                <img src="/BUDUR-e-commerce/img/product-img/product-1.jpg" alt="">
-                                <!-- Hover Thumb -->
+                                <img src="@deger.urunlerKapakFoto" alt="">
                                 <img class="hover-img" src="/BUDUR-e-commerce/img/product-img/product-2.jpg" alt="">
-                                <!-- Favourite -->
-                                <div class="product-favourite">
+                                @* <div class="product-favourite">
                                     <a href="#" class="favme fa fa-heart"></a>
-                                </div>
+                                </div> *@
                             </div>
-                            <!-- Product Description -->
                             <div class="product-description">
-                                <span>topshop</span>
+                                <span>MSI</span>
                                 <a href="single-product-details.html">
-                                    <h6>Knot Front Mini Dress</h6>
+                                    <h6>@deger.urunlerIsim</h6>
                                 </a>
-                                <p class="product-price">$80.00</p>
-
-                                <!-- Hover Content -->
-                                <div class="hover-content">
-                                    <!-- Add to Cart -->
+                                <p class="product-price">₺@deger.urunlerFiyat</p>
+                                @* <div class="hover-content">
                                     <div class="add-to-cart-btn">
-                                        <a href="#" class="btn essence-btn">Add to Cart</a>
+                                        <a href="#" class="btn essence-btn">Sepete Ekle</a>
                                     </div>
-                                </div>
+                                </div> *@
                             </div>
                         </div>
+                    }
+                    
 
-                        <!-- Single Product -->
+
+                        
+                        @* <!-- Single Product -->
                         <div class="single-product-wrapper">
                             <!-- Product Image -->
                             <div class="product-img">
@@ -144,7 +145,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> *@
                     </div>
                 </div>
             </div>
