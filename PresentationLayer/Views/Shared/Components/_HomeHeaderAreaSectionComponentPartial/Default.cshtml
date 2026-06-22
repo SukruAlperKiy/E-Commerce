@@ -1,4 +1,53 @@
-﻿<header class="header_area">
+﻿@using System.Data
+@{
+    DataSet kategorilerViewBagi = ViewBag.kategorilerViewBag as DataSet;
+}
+
+<style>
+    .category-bar {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #ebebeb;
+        padding: 10px 0;
+        width: 100%;
+
+        position: sticky;
+        top: 85px;
+        z-index: 999;
+    }
+
+    .category-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 5%;
+    }
+
+    .category-menu-list {
+        display: flex;
+        justify-content: center;
+        /*bu kod kategoriler arasinda bosluk birakiyor.*/
+        gap: 75px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .category-menu-list li a {
+        font-size: 14px;
+        font-weight: 600;
+        /* text-transform: uppercase; */
+        color: #252525;
+        letter-spacing: 1px;
+        transition: color 0.3s ease;
+        text-decoration: none;
+    }
+/*bu kod kategorilerin uzerine gelince altlarinin cizilmesini sagliyor.*/
+    .category-menu-list li a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+
+<header class="header_area">
         <div class="classy-nav-container breakpoint-off d-flex align-items-center justify-content-between">
             <!-- Classy Menu -->
             <nav class="classy-navbar" id="essenceNav">
@@ -42,6 +91,20 @@
                     <a href="#" id="essenceCartBtn"><img src="/BUDUR-e-commerce/img/core-img/bag.svg" alt=""> <span>3</span></a>
                 </div>
             </div>
-
         </div>
     </header>
+                <div class="category-bar">
+                    <div class="category-container">
+                        <nav class="category-nav">
+                            <ul class="category-menu-list">
+                                @foreach (DataRow satir in kategorilerViewBagi.Tables[0].Rows)
+                                {// if icine yazdiklarini bool'a cevirmen gerekiyor.
+                                    if (Convert.ToBoolean(satir["kategoriStatus"]) == true)
+                                    {
+                                        <li><a href="../admin">@satir["kategoriIsim"]</a></li>
+                                    }
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                </div>

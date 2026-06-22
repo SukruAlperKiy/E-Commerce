@@ -242,7 +242,9 @@ img {
 
 /* :: 4.0 Header Area CSS */
 .header_area {
-  position: fixed;
+  /*position: fixed; normalde boyleydi*/
+  /*bu kod navbarin tepede sabit kalmasini sagliyor.*/
+  position: sticky;
   z-index: 900;
   top: 0;
   left: 0;

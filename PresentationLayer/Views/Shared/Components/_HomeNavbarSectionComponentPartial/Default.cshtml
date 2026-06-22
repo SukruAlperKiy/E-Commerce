@@ -1,4 +1,11 @@
-﻿<div class="classynav">
+﻿@using System.Data
+
+@{
+
+    DataSet kategorilerDataSet = ViewBag.verilerViewBag as DataSet;
+}
+
+<div class="classynav">
                         <ul>
                             <li><a href="#">Shop</a>
                                 <div class="megamenu">
@@ -43,8 +50,16 @@
                                     <li><a href="contact.html">Contact</a></li>
                                 </ul>
                             </li>
+                            <li><a href="#">Kategoriler</a>
+                                <ul class="dropdown">
+                                    @foreach (DataRow sira in kategorilerDataSet.Tables[0].Rows)
+                                    {
+                                        <li><a href="../admin">@sira["kategoriIsim"]</a></li>
+                                    }
+                                </ul>
+                            </li>
                             <li><a href="blog.html">Blog</a></li>
-                            <li><a href="contact.html">Contact</a></li>
+                            <li><a href="../admin">Admin</a></li>
                         </ul>
                     </div>
 
