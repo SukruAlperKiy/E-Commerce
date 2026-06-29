@@ -5,6 +5,7 @@
 
 <style>
     .category-bar {
+        display: none;
         background-color: #f8f9fa;
         border-bottom: 1px solid #ebebeb;
         padding: 10px 0;
@@ -13,6 +14,13 @@
         position: sticky;
         top: 85px;
         z-index: 999;
+    }
+
+    /* Ekran genişliği laptoptan (992px veya daha büyük) itibaren görünür yapıyoruz */
+    @@media (min-width: 992px) {
+        .category-bar {
+            display: block; /* Laptop ve masaüstü ekranlarda görünür hale gelir */
+        }
     }
 
     .category-container {
@@ -25,7 +33,7 @@
         display: flex;
         justify-content: center;
         /*bu kod kategoriler arasinda bosluk birakiyor.*/
-        gap: 75px;
+        gap: 25px;
         list-style: none;
         margin: 0;
         padding: 0;
@@ -45,12 +53,6 @@
         text-decoration: underline;
     }
 </style>
-
-<div>
-
-
-</div>
-
 
 <header class="header_area">
         <div class="classy-nav-container breakpoint-off d-flex align-items-center justify-content-between">

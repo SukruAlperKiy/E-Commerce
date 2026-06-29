@@ -14,4 +14,8 @@
     <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Photos\SliderKapak\" />
+  </ItemGroup>
+
 </Project>

@@ -6,6 +6,7 @@ namespace PresentationLayer.Controllers
 {
     public class TopCategoryAreaController : Controller
     {
+
         private readonly ITopCategoryAreaService _topCategoryAreaService;
         public TopCategoryAreaController(ITopCategoryAreaService topCategoryAreaService123)
         {
@@ -17,6 +18,8 @@ namespace PresentationLayer.Controllers
             var degerler = _topCategoryAreaService.aaGetAll();
             return View(degerler);
         }
+
+
 
         [HttpGet]
         public IActionResult CreateTopCategoryArea()
@@ -31,11 +34,16 @@ namespace PresentationLayer.Controllers
             return RedirectToAction("TopCategoryAreaList");
         }
 
+
+
         public IActionResult DeleteTopCategoryArea(int id)
         {
             _topCategoryAreaService.aaDelete(id);
             return RedirectToAction("TopCategoryAreaList");
         }
+
+
+
 
         [HttpGet]
         public IActionResult UpdateTopCategoryArea(int id)

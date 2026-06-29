@@ -21,5 +21,9 @@ namespace DataAccessLayer.Context
         public DbSet<Footer> EfFooter { get; set; }
         public DbSet<FooterSol> EfFooterSol { get; set; }
 
+
+
+
+
     }
 }

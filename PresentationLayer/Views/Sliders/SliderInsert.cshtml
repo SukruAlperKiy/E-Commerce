@@ -1,0 +1,213 @@
+﻿@using System.Data
+
+@{
+    ViewData["Title"] = "SliderInsert";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+    DataSet CreateSliderSelectDataSet = ViewBag.SelectSliderViewBag as DataSet;
+}
+
+<style>
+    /* Örnek projedeki yükleme alanının şık görünmesi için küçük bir stil */
+    .yukleme-alani {
+        border: 2px dashed #dee2e6;
+        padding: 25px;
+        text-align: center;
+        border-radius: 8px;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+    }
+    .yukleme-alani:hover {
+        background: #e9ecef;
+    }
+</style>
+
+<div class="container">
+    <div class="page-inner"> 
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">One Cikan Kategoriler Listesi</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="icon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Listeleri</a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">One Cikan Kategoriler Operasyonlari</a>
+                </li>
+            </ul>
+        </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">Yeni One Cikan Kategori Olustur</div>
+                  </div>
+                    <div class="card-body">                               @*Enctype resim eklemek icin koymamiz gerekiyor. *@
+                        <form role="form" action="/Sliders/SliderInsert" method="post" enctype="multipart/form-data">
+
+                                 @*Bu kisim FooterLogoAltBaslik'i text areadan mi aliyor ve nasil kaydediyor?*@
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold"> Slider Title</label>
+                                <textarea class="form-control shadow-none" name="SliderTitleParametre" rows="1" placeholder="Placeholder"></textarea>
+                            </div>
+                            <br />
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold"> Slider Kucuk Title</label>
+                                <textarea class="form-control shadow-none" name="SliderKucukTitleParametre" rows="1" placeholder="Placeholder"></textarea>
+                            </div>
+                            <br />
+
+                            <div class="col-md-6">
+                                <label class="form-label d-block mb-2">Kapak Fotografi Yukle</label>
+                                <div class="yukleme-alani" onclick="document.getElementById('fileInput').click()">
+                                    <p class="mb-1 fw-bold">Resim Yuklemek Icin Tiklayin</p>
+                                    <p class="text-muted small mb-0">PNG, JPG, WEBP (Maks. 5MB)</p>
+                                    <input type="file" class="d-none" id="fileInput" name="ImageUrlParametre" accept="image/*" onchange="yuklenenResmiGoruntule(event)"/>   
+                                </div>
+                                <img id="resimOnizleme" class="d-none mt-2" style="max-width:100%; max-height:200px; border-radius:6px; object-fit: contain;" alt="Önizleme" />
+                            </div>
+                            <br />
+
+                            <div class="modal fade" id="cropModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Kapak Fotoğrafını Ayarla</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div style="max-height: 450px; overflow: hidden;">
+                                                <img id="modalResim" src="" style="display: block; max-width: 100%;">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                            <button type="button" class="btn btn-primary" id="btnKirpVeKaydet">Resmi Kırp ve Uygula</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            <button type="submit" class="btn btn-primary">Slider Olusutur</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+@section scripts
+{
+    <script>
+    // Cropper ve Modal için gerekli değişkenler
+    let cropper;
+    const fileInput = document.getElementById('fileInput');
+    const resimOnizleme = document.getElementById('resimOnizleme');
+    const modalResim = document.getElementById('modalResim');
+    const cropModalElement = document.getElementById('cropModal');
+    
+    // Bootstrap Modal nesnesi (Bootstrap 5)
+    const cropModal = new bootstrap.Modal(cropModalElement);
+
+    // Sizin mevcut fonksiyonunuz (Geliştirilmiş hali)
+    function yuklenenResmiGoruntule(event) {
+        const secilenIlkDosya = event.target.files[0];
+
+        if (secilenIlkDosya == null) return;
+
+        // 1. Kontrol: Dosya resim mi?
+        if (secilenIlkDosya.type.startsWith('image/') == false) {
+            alert("Lütfen bir resim seçiniz.");
+            event.target.value = "";
+            return;
+        }
+
+        // 2. Kontrol: Dosya boyutu 5MB'tan küçük mü?
+        const maxSize = 5 * 1024 * 1024;
+        if (secilenIlkDosya.size > maxSize) {
+            alert("Resim 5MB altı olmalı.");
+            event.target.value = "";
+            return;
+        }
+
+        // --- DOĞRULAMALAR BAŞARILIYSA BURASI ÇALIŞIR ---
+        
+        // Resmi geçici bir URL'e çevirip modal içine yüklüyoruz
+        const url = URL.createObjectURL(secilenIlkDosya);
+        modalResim.src = url;
+        
+        // Kırpma modalını açıyoruz
+        cropModal.show();
+    }
+
+    // Modal ekranda tamamen belirdiğinde Cropper'ı başlat/sıfırla
+    cropModalElement.addEventListener('shown.bs.modal', function () {
+        if (cropper) {
+            cropper.destroy(); 
+        }
+        
+        cropper = new Cropper(modalResim, {
+            aspectRatio: 1920 / 800, // İstediğiniz 621x931 dikey formatı
+            viewMode: 1,            // Seçim alanının dışarı taşmasını önler
+            autoCropArea: 1,        // Resmi ilk açışta maksimum kaplayacak şekilde seçer
+            responsive: true
+        });
+    });
+
+    // "Resmi Kırp ve Uygula" butonuna basıldığında tetiklenecek olay
+    document.getElementById('btnKirpVeKaydet').addEventListener('click', function () {
+        if (!cropper) return;
+
+        // Tam olarak istediğiniz hedef boyutlarda çıktı alıyoruz
+        const canvas = cropper.getCroppedCanvas({
+            width: 1920,
+            height: 800
+        });
+
+        // Kırpılan resmi Blob (Dosya) formatına çeviriyoruz
+        canvas.toBlob(function (blob) {
+            
+            // 1. Sizin kodunuzdaki önizleme alanını kırpılmış yeni resimle güncelliyoruz
+            resimOnizleme.src = URL.createObjectURL(blob);
+            resimOnizleme.classList.remove('d-none');
+
+            // 2. Dosya girdisini (input) kırpılmış sanal dosya ile değiştiriyoruz
+            // Böylece form post edildiğinde backend kırpılmış resmi alır.
+            const dosyaAdi = fileInput.files[0]?.name || "urun-kapak.jpg";
+            const yeniDosya = new File([blob], dosyaAdi, { type: "image/jpeg" });
+            
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(yeniDosya);
+            fileInput.files = dataTransfer.files; 
+
+            // Modalı kapat
+            cropModal.hide();
+        }, 'image/jpeg', 0.9); // 0.9 kalite ile sıkıştırır
+    });
+
+    // Kullanıcı kırpmadan kapatırsa temizlik yap
+    cropModalElement.addEventListener('hidden.bs.modal', function () {
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        // Eğer daha önceden onaylanmış bir önizleme resmi yoksa input'u temizle
+        if (resimOnizleme.classList.contains('d-none')) {
+            fileInput.value = '';
+        }
+    });
+</script>
+}

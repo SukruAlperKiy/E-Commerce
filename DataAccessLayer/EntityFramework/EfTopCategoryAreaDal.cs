@@ -17,6 +17,7 @@ namespace DataAccessLayer.EntityFramework
         {
             _context = context555;
         }
+
         public void Delete(int id)
         {
             var deger123 = _context.EfTopCategoryArea.Find(id);

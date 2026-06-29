@@ -24,9 +24,6 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
-
-
-
         #region footerLogo
         public IActionResult Footer_Logo()
         {
@@ -226,7 +223,6 @@ namespace PresentationLayer.Controllers
         #endregion
 
         #region Urunler
-
         public IActionResult UrunlerSelect()
         {
             string urunSelectSql = "Select UrunId, UrunFiyat, UrunIsim, UrunAciklama, UrunlerKapakFoto1, UrunStatus from Urunler";
