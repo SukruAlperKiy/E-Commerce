@@ -1,17 +1,235 @@
-﻿<div class="cta-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="cta-content bg-img background-overlay" style="background-image: url(/BUDUR-e-commerce/img/bg-img/bg-5.jpg);">
-                        <div class="h-100 d-flex align-items-center justify-content-end">
-                            <div class="cta--text">
-                                <h6>-60%</h6>
-                                <h2>Global Sale</h2>
-                                <a href="#" class="btn essence-btn">Buy Now</a>
-                            </div>
-                        </div>
+﻿@using System.Data
+
+@{
+    DataSet KategoriUrunSelectDataSet = ViewBag.KategoriUrunSelectViewBag as DataSet;
+    DataSet KategoriSelectDataSet = ViewBag.KategoriSelectViewBag as DataSet;
+
+}
+<style>
+    .bu-alana-ozel-single-product-wrapper {
+    position: relative;
+    z-index: 1;
+/*assagida cok fazla bosluk kaliyordu o yuzden margin-bottom: 0px; yaptik*/
+    margin-bottom: 0px;
+    overflow: hidden;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+}
+  .bu-alana-ozel-single-product-wrapper .product-img {
+    position: relative;
+    z-index: 1;
+    overflow: hidden; }
+    .bu-alana-ozel-single-product-wrapper .product-img img {
+      width: 100%;
+      -webkit-transition-duration: 500ms;
+      transition-duration: 500ms; }
+    .bu-alana-ozel-single-product-wrapper .product-img .hover-img {
+      -webkit-transition-duration: 500ms;
+      transition-duration: 500ms;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden; }
+    .bu-alana-ozel-single-product-wrapper .product-img .product-badge {
+      height: 25px;
+      background-color: #000000;
+      color: #ffffff;
+      font-family: "Ubuntu", sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 0 10px;
+      display: inline-block;
+      line-height: 25px;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10; }
+      .bu-alana-ozel-single-product-wrapper .product-img .product-badge.offer-badge {
+        background-color: #dc0345; }
+      .bu-alana-ozel-single-product-wrapper .product-img .product-badge.new-badge {
+        background-color: #0315ff; }
+    .bu-alana-ozel-single-product-wrapper .product-img .product-favourite a {
+      position: absolute;
+      height: 25px;
+      width: 45px;
+      font-size: 14px;
+      color: #ccc;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+      line-height: 25px;
+      background-color: #ffffff;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      opacity: 0;
+      visibility: hidden; }
+      .bu-alana-ozel-single-product-wrapper .product-img .product-favourite a.active {
+        opacity: 1;
+        visibility: visible; }
+  .bu-alana-ozel-single-product-wrapper .product-description {
+    position: relative;
+    z-index: 1;
+    padding-top: 25px; }
+    .bu-alana-ozel-single-product-wrapper .product-description span {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #787878;
+      margin-bottom: 15px;
+      letter-spacing: 0.75px;
+      font-weight: 600; }
+    .bu-alana-ozel-single-product-wrapper .product-description h6 {
+      color: #222222;
+      margin-bottom: 5px; }
+    .bu-alana-ozel-single-product-wrapper .product-description p {
+      margin-bottom: 0;
+      font-size: 14px;
+      font-family: "Ubuntu", sans-serif;
+      font-weight: 700;
+      color: #000000; }
+      .bu-alana-ozel-single-product-wrapper .product-description p span {
+        font-size: 14px;
+        font-family: "Ubuntu", sans-serif;
+        font-weight: 700;
+        color: #aaaaaa;
+        margin-right: 10px;
+        text-decoration: line-through; }
+    .bu-alana-ozel-single-product-wrapper .product-description .hover-content {
+      position: absolute;
+      width: calc(100% - 40px);
+      top: -70px;
+      left: 20px;
+      right: 20px;
+      opacity: 0;
+      visibility: hidden;
+      -webkit-transition-duration: 500ms;
+      transition-duration: 500ms; }
+      .bu-alana-ozel-single-product-wrapper .product-description .hover-content .essence-btn {
+        width: 100%; }
+  .bu-alana-ozel-single-product-wrapper .favme {
+    cursor: pointer;
+    color: #ccc; }
+    .bu-alana-ozel-single-product-wrapper .favme.active {
+      color: #dc0345 !important; }
+    .bu-alana-ozel-single-product-wrapper .favme.is_animating {
+      animation: favme-anime .5s; }
+  .bu-alana-ozel-single-product-wrapper:hover .product-img .hover-img {
+    opacity: 1;
+    visibility: visible; }
+  .bu-alana-ozel-single-product-wrapper:hover .product-img .product-favourite a {
+    opacity: 1;
+    visibility: visible; }
+  .bu-alana-ozel-single-product-wrapper:hover .hover-content {
+    opacity: 1;
+    visibility: visible; }
+
+@@keyframes favme-anime {
+  0% {
+    opacity: 1;
+    font-size: 14px;
+    -webkit-text-stroke-color: transparent; }
+  25% {
+    opacity: .6;
+    color: #ffffff;
+    font-size: 15px;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #dc0345; }
+  75% {
+    opacity: .6;
+    color: #ffffff;
+    font-size: 15px;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #dc0345; }
+  100% {
+    opacity: 1;
+    font-size: 14px;
+    -webkit-text-stroke-color: transparent; } }
+.pagination {
+  position: relative;
+  z-index: 1; }
+  .pagination .page-item .page-link {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ebebeb;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 38px;
+    padding: 0;
+    text-align: center;
+    color: #787878; }
+    .pagination .page-item .page-link:hover, .pagination .page-item .page-link:focus {
+      color: #0315ff;
+      box-shadow: none; }
+  .pagination .page-item:first-child {
+    margin-right: 15px; }
+    .pagination .page-item:first-child .page-link {
+      margin-left: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0; }
+  .pagination .page-item:last-child {
+    margin-left: 15px; }
+    .pagination .page-item:last-child .page-link {
+      margin-left: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0; }
+</style>
+
+
+    <style>
+        .slider-alani{
+            padding-left: 6.5% !important;
+            padding-right: 6.5% !important;
+        }
+
+        .urun-ismi-kisaltma{
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .kategori-urun-style{
+            border: 1px solid #e1e1e1;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+    </style>
+    
+
+<section class="new_arrivals_area section-padding-2 clearfix">
+    <div class="container-fluid slider-alani">
+        <div class="row">
+            @foreach (DataRow deger in KategoriSelectDataSet.Tables[0].Rows)
+            {
+                <div class="col-12 kategori-urun-style">
+                    <h2 class="mb-4">@deger["kategoriIsim"]</h2>
+                    <div class="popular-products-slides owl-carousel">
+                        @foreach (DataRow kategorininUrunu in KategoriUrunSelectDataSet.Tables[0].Rows)
+                        {
+                            if (kategorininUrunu["kategoriId"].ToString() == deger["kategoriId"].ToString())
+                            {
+                                <div class="bu-alana-ozel-single-product-wrapper">
+                                    <div class="product-img">
+                                        <img src="@kategorininUrunu["UrunlerKapakFoto1"]" alt="">
+                                        @* <img class="hover-img" src="/BUDUR-e-commerce/img/product-img/product-4.jpg" alt=""> *@
+                                    </div>
+                                    <div class="product-description">
+                                        <a href="single-product-details.html">
+                                            <h6 class="urun-ismi-kisaltma">@kategorininUrunu["UrunIsim"]</h6>
+                                        </a>
+                                        @* <p class="product-price">₺@deger.urunlerFiyat</p> *@
+                                    </div>
+                                </div>
+                            }
+                        }
                     </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
+</section>
+

@@ -11,7 +11,15 @@
 
         .slider-alani{
             padding-left: 6.5% !important;
-            padding-right: 6% !important;
+            padding-right: 6.5% !important;
+        }
+
+        .urun-ismi-kisaltma{
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
     </style>
@@ -22,7 +30,7 @@
                 <div class="col-12">
                     <div class="section-heading text-left">
                         <h2 class="cok-satan-urunler-baslik-rengi">Çok Satan Ürünler</h2>
-                        <p class="siyah-renk-yazi"><strong>Müşterilerimizin en çok tercih ettiği ürünleri görmek ister misiniz?</strong></p>
+                        <p style="color: black"><strong>Müşterilerimizin en çok tercih ettiği ürünleri görmek ister misiniz?</strong></p>
                     </div>
                 </div>
             </div>
@@ -44,9 +52,9 @@
                                 </div> *@
                             </div>
                             <div class="product-description">
-                                <span>MSI</span>
+                                @* <span>MSI</span> *@
                                 <a href="single-product-details.html">
-                                    <h6>@deger.urunlerIsim</h6>
+                                    <h6 class="urun-ismi-kisaltma">@deger.urunlerIsim</h6>
                                 </a>
                                 <p class="product-price">₺@deger.urunlerFiyat</p>
                                 @* <div class="hover-content">
