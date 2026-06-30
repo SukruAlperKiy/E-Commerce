@@ -4,7 +4,7 @@
 }
 
 <style>
-    .category-bar {
+    .gri-category-bar {
         display: none;
         background-color: #f8f9fa;
         border-bottom: 1px solid #ebebeb;
@@ -18,39 +18,81 @@
 
     /* Ekran genişliği laptoptan (992px veya daha büyük) itibaren görünür yapıyoruz */
     @@media (min-width: 992px) {
-        .category-bar {
+        .gri-category-bar {
             display: block; /* Laptop ve masaüstü ekranlarda görünür hale gelir */
         }
     }
 
-    .category-container {
+    .gri-category-container {
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 5%;
     }
 
-    .category-menu-list {
+    .gri-category-menu-list {
         display: flex;
         justify-content: center;
-        /*bu kod kategoriler arasinda bosluk birakiyor.*/
-        gap: 25px;
+        /*Bu kod kategoriler arasinda bosluk birakiyor.*/
+        /* En az 15px olsun, ideal olarak ekranın %5'i olsun, ama asla 50px'i geçmesin */
+        gap: clamp(15px, 5vw, 50px);
         list-style: none;
         margin: 0;
         padding: 0;
     }
 
-    .category-menu-list li a {
+    .gri-category-menu-list li a {
         font-size: 14px;
         font-weight: 600;
-        /* text-transform: uppercase; */
+        text-transform: uppercase;
         color: #252525;
         letter-spacing: 1px;
         transition: color 0.3s ease;
         text-decoration: none;
     }
+
 /*bu kod kategorilerin uzerine gelince altlarinin cizilmesini sagliyor.*/
-    .category-menu-list li a:hover {
+    .gri-category-menu-list li a:hover {
         text-decoration: underline;
+    }
+
+
+/*Buradan sonrasi arama cubugu style*/
+    .arama-cubuk-body{
+    /*Bu kisim arama cubugunun ortada cikmasina yariyor.*/
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        background: #fff;
+    }
+
+    .arama-cubuk-kutusu{
+        height: 50px;
+        display: flex;
+        cursor: pointer;
+        padding: 10px 20px;
+        background: #fff;
+        border-radius: 30px;
+        align-items: center;
+        /* box-shadow: 0 10px 25px rgba(0,0,0,0.3); */
+        border: 1px solid #000;
+    }
+
+    .arama-cubuk-kutusu input{
+        width: 600px;
+        outline: none;
+        border: none;
+        font-weight: 500;
+        transition: 0.8s;
+        background: transparent;
+    }
+
+    .arama-cubuk-kutusu a .fa{
+        color: #000;
+        font-size: 18px;
+        margin-right: 15px;
     }
 </style>
 
@@ -76,15 +118,18 @@
                 </div>
             </nav>
 
+            <!-- Arama Cubugu -->
+                <div class="arama-cubuk-body">
+                    <div class="arama-cubuk-kutusu">
+                        <a href="#">
+                            <i class="fa fa-search"></i>
+                        </a>
+                        <input type="text" placeholder="Aramak istedigin urunu yaz, kolayca bul!">
+                    </div>
+                </div>
+
             <!-- Header Meta Data -->
             <div class="header-meta d-flex clearfix justify-content-end">
-                <!-- Search Area -->
-                <div class="search-area">
-                    <form action="#" method="post">
-                        <input type="search" name="search" id="headerSearch" placeholder="Type for search">
-                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-                    </form>
-                </div>
                 <!-- Favourite Area -->
                 <div class="favourite-area">
                     <a href="#"><img src="/BUDUR-e-commerce/img/core-img/heart.svg" alt=""></a>
@@ -100,10 +145,10 @@
             </div>
         </div>
     </header>
-                <div class="category-bar">
-                    <div class="category-container">
+                <div class="gri-category-bar">
+                    <div class="gri-category-container">
                         <nav class="category-nav">
-                            <ul class="category-menu-list">
+                            <ul class="gri-category-menu-list">
                                 @foreach (DataRow satir in kategorilerViewBagi.Tables[0].Rows)
                                 {// if icine yazdiklarini bool'a cevirmen gerekiyor.
                                     if (Convert.ToBoolean(satir["kategoriStatus"]) == true)

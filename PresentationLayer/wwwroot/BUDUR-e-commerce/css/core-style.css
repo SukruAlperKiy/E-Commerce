@@ -149,7 +149,7 @@ img {
 
 /* Section Heading */
 .section-heading {
-  margin-bottom: 50px;
+  margin-bottom: 5px;
   position: relative;
   z-index: 1; }
   .section-heading h2 {

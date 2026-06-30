@@ -2,16 +2,16 @@
 
 @{
     DataSet SelectSliderDataSet = ViewBag.SelectSliderViewBag as DataSet;
-    int sayac = 0;
+    
 }
 <style>
     .container1{
-        padding: 2rem;
+        padding: 1rem;
     }
-
+@*Slider Imagelerin Boyutunu Degistiren Kisim*@
     .slider-wrapper1{
         position: relative;
-        max-width: 48rem;
+        max-width: 82.5rem;
         margin: 0 auto;
     }
 
@@ -19,9 +19,12 @@
         display: flex;
         aspect-ratio: 185 / 77;
         overflow-x: auto;
-        scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
         border-radius: 0.5rem;
+    }
+
+    .slider1::-webkit-scrollbar{
+        display: none;
     }
 
     .slider1 img{
@@ -40,9 +43,10 @@
         z-index: 1;
     }
 
+    @*Sliderleri degistirebilmek icin noktali tiklama kisimlari*@
     .slider-nav1 a{
-        width: 0.5rem;
-        height: 0.5rem;
+        width: 1rem;
+        height: 1rem;
         border-radius: 50%;
         background-color: #fff;
         opacity: 0.75;
@@ -58,16 +62,49 @@
 <section class="container1">
     <div class="slider-wrapper1">
         <div class="slider1">
-            @foreach (DataRow sira in SelectSliderDataSet.Tables[0].Rows)
-            {
-                <img id="slide-@(sayac+1)" src="@sira["ImageUrl"]" />
+            @{
+                int imgSayac = 0;
+                foreach (DataRow sira in SelectSliderDataSet.Tables[0].Rows)
+                {
+                    <img id="slide-@imgSayac" src="@sira["ImageUrl"]" />
+                    imgSayac++;
+                }
             }
         </div>
+
         <div class="slider-nav1">
-            <a href="#slide-@(sayac)"></a>
+            @{
+                int navSayac = 0;
+                foreach (DataRow sira in SelectSliderDataSet.Tables[0].Rows)
+                {// sayfanin ortasina zipliyordu. biz de bu ziplamayi duzeltmek icin href yerine data-target kullandik.
+                    <a href="#slide-@navSayac"></a>
+                    navSayac++;
+                }
+            }
         </div>
     </div>
 </section>
+
+@* <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.slider-nav1 a').forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                var targetId = this.getAttribute('href').substring(1);
+                var targetEl = document.getElementById(targetId);
+                if (targetEl) {
+                    targetEl.scrollIntoView({
+                        behavior: 'smooth',
+                        inline: 'start',
+                        block: 'nearest'
+                    });
+                }
+            });
+        });
+    });
+</script> *@
+
+
 
 
 @* <style>
