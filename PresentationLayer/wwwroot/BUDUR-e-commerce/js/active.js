@@ -54,6 +54,53 @@
         });
     }
 
+
+
+    if ($.fn.owlCarousel) {
+        $('.kategorisi-secilen-urunler-slides').owlCarousel({
+            items: 3,
+            // bu "margin" urunlerin arasindaki boslugu degistiriyor.
+            margin: 20,
+            //loop: true,
+            nav: false,
+            dots: false,
+            //autoplay: true,
+            //autoplayTimeout: 5000,
+            //smartSpeed: 1000,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                320: {
+                    items: 2
+                },
+                768: {
+                    items: 2
+                },
+                992: {
+                    items: 2
+                },
+                1024: {
+                    items: 3
+                },
+                1440: {
+                    items: 3
+                }
+            }
+        });
+        $('.urunler-thumbnail-slides').owlCarousel({
+            items: 1,
+            margin: 0,
+            loop: true,
+            nav: true,
+            navText: ["<img src='img/core-img/long-arrow-left.svg' alt=''>", "<img src='img/core-img/long-arrow-right.svg' alt=''>"],
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            smartSpeed: 1000
+        });
+    }
+
     // :: Header Cart Active Code
     var cartbtn1 = $('#essenceCartBtn');
     var cartOverlay = $(".cart-bg-overlay");

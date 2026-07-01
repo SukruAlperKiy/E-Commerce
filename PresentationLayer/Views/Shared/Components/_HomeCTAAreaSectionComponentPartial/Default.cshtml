@@ -14,7 +14,8 @@
     overflow: hidden;
     background-color: #ffffff;
     border-radius: 20px;
-    padding: 20px;
+/* urun resimleri bosluk birakiyordu onu 0 yaptim.*/
+    padding: 0px;
 }
   .bu-alana-ozel-single-product-wrapper .product-img {
     position: relative;
@@ -184,6 +185,10 @@
             padding-right: 6.5% !important;
         }
 
+        h2.baslik-margin{
+            margin-top: 5px;
+        }
+
         .urun-ismi-kisaltma{
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -206,8 +211,8 @@
             @foreach (DataRow deger in KategoriSelectDataSet.Tables[0].Rows)
             {
                 <div class="col-12 kategori-urun-style">
-                    <h2 class="mb-4">@deger["kategoriIsim"]</h2>
-                    <div class="popular-products-slides owl-carousel">
+                    <h2 class="baslik-margin">@deger["kategoriIsim"]</h2>
+                    <div class="kategorisi-secilen-urunler-slides owl-carousel">
                         @foreach (DataRow kategorininUrunu in KategoriUrunSelectDataSet.Tables[0].Rows)
                         {
                             if (kategorininUrunu["kategoriId"].ToString() == deger["kategoriId"].ToString())
