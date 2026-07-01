@@ -15,7 +15,7 @@
     background-color: #ffffff;
     border-radius: 20px;
 /* urun resimleri bosluk birakiyordu onu 0 yaptim.*/
-    padding: 0px;
+    padding: 5px;
 }
   .bu-alana-ozel-single-product-wrapper .product-img {
     position: relative;
@@ -181,15 +181,17 @@
 
     <style>
         .slider-alani{
-            padding-left: 6.5% !important;
-            padding-right: 6.5% !important;
+            padding-left: 6% !important;
+            padding-right: 6% !important;
         }
 
-        h2.baslik-margin{
+        h4.baslik-margin{
             margin-top: 5px;
+            color: #414141 !important;
         }
 
-        .urun-ismi-kisaltma{
+        .urun-ismi-kisaltma-buraya-ozel{
+            font-weight: 300;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -198,9 +200,9 @@
         }
 
         .kategori-urun-style{
-            border: 1px solid #e1e1e1;
+            border: 1px solid #e1e1e1 !important;
             border-radius: 20px;
-            margin-bottom: 15px;
+            padding: 10px;
         }
     </style>
     
@@ -210,27 +212,29 @@
         <div class="row">
             @foreach (DataRow deger in KategoriSelectDataSet.Tables[0].Rows)
             {
-                <div class="col-12 kategori-urun-style">
-                    <h2 class="baslik-margin">@deger["kategoriIsim"]</h2>
-                    <div class="kategorisi-secilen-urunler-slides owl-carousel">
-                        @foreach (DataRow kategorininUrunu in KategoriUrunSelectDataSet.Tables[0].Rows)
-                        {
-                            if (kategorininUrunu["kategoriId"].ToString() == deger["kategoriId"].ToString())
+                <div class="col-md-4 mb-4">
+                    <div class="kategori-urun-style">
+                    <h4 class="baslik-margin">@deger["kategoriIsim"]</h4>
+                        <div class="kategorisi-secilen-urunler-slides owl-carousel">
+                            @foreach (DataRow kategorininUrunu in KategoriUrunSelectDataSet.Tables[0].Rows)
                             {
-                                <div class="bu-alana-ozel-single-product-wrapper">
-                                    <div class="product-img">
-                                        <img src="@kategorininUrunu["UrunlerKapakFoto1"]" alt="">
-                                        @* <img class="hover-img" src="/BUDUR-e-commerce/img/product-img/product-4.jpg" alt=""> *@
+                                if (kategorininUrunu["kategoriId"].ToString() == deger["kategoriId"].ToString())
+                                {
+                                    <div class="bu-alana-ozel-single-product-wrapper">
+                                        <div class="product-img">
+                                            <img src="@kategorininUrunu["UrunlerKapakFoto1"]" alt="">
+                                            <img class="hover-img" src="/BUDUR-e-commerce/img/product-img/product-4.jpg" alt="">
+                                        </div>
+                                        <div class="product-description">
+                                            <a href="single-product-details.html">
+                                                <h6 class="urun-ismi-kisaltma-buraya-ozel">@kategorininUrunu["UrunIsim"]</h6>
+                                            </a>
+                                            @* <p class="product-price">₺@deger.urunlerFiyat</p> *@
+                                        </div>
                                     </div>
-                                    <div class="product-description">
-                                        <a href="single-product-details.html">
-                                            <h6 class="urun-ismi-kisaltma">@kategorininUrunu["UrunIsim"]</h6>
-                                        </a>
-                                        @* <p class="product-price">₺@deger.urunlerFiyat</p> *@
-                                    </div>
-                                </div>
+                                }
                             }
-                        }
+                        </div>
                     </div>
                 </div>
             }
